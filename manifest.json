@@ -20,7 +20,7 @@
   "content_scripts": [{
       "matches": ["<all_urls>"],
       "js":[
-          "vendor/js/jquery-3.2.1.min.js"
+          "vendor/jquery-3.2.1.min.js"
       ],
       "run_at":"document_start"
   }],
