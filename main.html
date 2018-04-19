@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Webmaster tool</title>
+    <script src="vendor/jquery-3.2.1.min.js"></script>
+    <script src="vendor/jquery-ui.min.js"></script>
+    <script src="vendor/bootstrap.min.js"></script>
+    <script src="js/vultr.js"></script>
+    <script src="js/webmastertool.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+  </head>
+  <body>
+    <div id="tabs" class="main-window">
+      <ul>
+        <li><a id="vultr"   href="#tab-vultr">Vultr</a></li>
+        <li><a id="setting" href="#tab-setting">Setting</a></li>
+      </ul>
+
+      <div id="tab-vultr">
+        <h4>Vultr</h4>
+        <div id="vultr-div"></div>
+      </div>
+
+      <div id="tab-setting">
+        <h4>Setting</h4>
+        <div id="setting-div"></div>
+      </div>
+    </div>
+  </body>
+</html>
+
