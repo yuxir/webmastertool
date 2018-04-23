@@ -14,8 +14,8 @@
     <link rel="stylesheet" type="text/css" href="vendor/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
   </head>
-  <body>
-    <div id="tabs" class="main-window">
+  <body class="main-window">
+    <div id="tabs">
       <ul>
         <li><a id="vultr"   href="#tab-vultr">Vultr</a></li>
         <li><a id="setting" href="#tab-setting">Setting</a></li>
@@ -23,7 +23,28 @@
 
       <div id="tab-vultr">
         <h4>Vultr</h4>
-        <div id="vultr-div"></div>
+        <div id="vultr-div">
+          <h3>Account information</h3>
+          <div id="vultr-account">
+            account
+          </div>
+
+          <h3>Server</h3>
+          <div id="vultr-server">
+            Server
+          </div>
+
+          <h3>Backup</h3>
+          <div id="vultr-backup">
+            backup
+          </div>
+
+          <h3>Snapshot</h3>
+          <div id="vultr-snapshot">
+            snapshots
+          </div>
+
+        </div>
       </div>
 
       <div id="tab-setting">
@@ -31,6 +52,9 @@
         <div id="setting-div"></div>
       </div>
     </div>
+    <div id="info-window">
+    </div>
   </body>
 </html>
+
 
