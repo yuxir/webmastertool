@@ -20,6 +20,31 @@ document.addEventListener('DOMContentLoaded', function() {
         $("#vultr-account").html(account_html_block);
 
 
+        // Load Vultr server information
+        let servers = ["server1", "server2"];
+        let server_html_block = '';
+        servers.forEach(function(server, index, array) {
+            server_html_block += server + '<br/>';
+        });
+        $("#vultr-server").html(server_html_block);
+
+        // Load Vultr backup information
+        let backups = ["backup1", "backup2"];
+        let backup_html_block = '';
+        backups.forEach(function(backup, index, array) {
+            backup_html_block += backup + '<br/>';
+        });
+        $("#vultr-backup").html(backup_html_block);
+
+        // Load Vultr snapshot information
+        let snapshots = ["snapshot1", "snapshot2"];
+        let snapshot_html_block = '';
+        snapshots.forEach(function(snapshot, index, array) {
+            snapshot_html_block += snapshot + '<br/>';
+        });
+        $("#vultr-snapshot").html(snapshot_html_block);
+
+
         $("#info-window").html(' Loaded.');
     });
 
