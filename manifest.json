@@ -9,19 +9,22 @@
      "default_title": "Webmaster Tool",
      "default_popup": "main.html"
   },
+  "icons": { "16": "icons/icon16.png",
+              "128": "icons/icon128.png" },
   "update_url":"http://clients2.google.com/service/update2/crx",
   "description": "Webmaster tool",
   "web_accessible_resources": [
   		"js/*",
         "vendor/*",
         "css/*",
-  		"images/*"
+  		"icons/*"
   ],
   "content_scripts": [{
       "matches": ["<all_urls>"],
       "js":[
           "vendor/jquery-3.2.1.min.js",
-          "vendor/jquery-ui.min.js"
+          "vendor/jquery-ui.min.js",
+          "vendor/bootstrap.min.js"
       ],
       "run_at":"document_start"
   }],
@@ -32,3 +35,4 @@
      "<all_urls>"
   ]
 }
+
