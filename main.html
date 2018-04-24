@@ -17,39 +17,36 @@
   <body class="main-window">
     <div id="tabs">
       <ul>
-        <li><a id="vultr"   href="#tab-vultr">Vultr</a></li>
-        <li><a id="setting" href="#tab-setting">Setting</a></li>
+        <li><a id="vultr"    href="#tab-vultr">Vultr</a></li>
+        <li><a id="settings" href="#tab-settings">Settings</a></li>
       </ul>
 
       <div id="tab-vultr">
-        <h4>Vultr</h4>
         <div id="vultr-div">
           <h3>Account information</h3>
           <div id="vultr-account">
-            account
           </div>
 
           <h3>Server</h3>
           <div id="vultr-server">
-            Server
           </div>
 
           <h3>Backup</h3>
           <div id="vultr-backup">
-            backup
           </div>
 
           <h3>Snapshot</h3>
           <div id="vultr-snapshot">
-            snapshots
           </div>
 
         </div>
       </div>
 
-      <div id="tab-setting">
-        <h4>Setting</h4>
-        <div id="setting-div"></div>
+      <div id="tab-settings">
+        <div id="settings-div">
+		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/><br/>
+		  <button type="button" id="save_settings">Save</button>
+		</div>
       </div>
     </div>
     <div id="info-window">
