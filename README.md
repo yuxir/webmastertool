@@ -11,8 +11,11 @@ Lots of technical people like me use various cloud service providers to manage t
 ## Technology Stack
 
 Chrome extension
+
 Javascript
+
 JQuery
+
 Bootstrap
 
 ## Features
