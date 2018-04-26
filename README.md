@@ -26,7 +26,10 @@ Bootstrap
 
 **Vultr snapshot information**: All snapshots are listed here.
 
+**Vultr DNS information**: All domains are listed here.
+
 **Settings**: In the current version, user can set their Vultr API key here to enable all features under Vultr tab.
+
 
 ## Roadmap
 
