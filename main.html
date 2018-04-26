@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="vendor/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="vendor/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/fontawesome-all.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
   </head>
   <body class="main-window">
@@ -19,6 +19,7 @@
       <ul>
         <li><a id="vultr"    href="#tab-vultr">Vultr</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
+        <li><a id="about" href="#tab-about">About</a></li>
       </ul>
 
       <div id="tab-vultr">
@@ -38,14 +39,28 @@
           <h3>Snapshot</h3>
           <div id="vultr-snapshot">
           </div>
+          
+          <h3>DNS</h3>
+          <div id="vultr-dns">
+          </div>
 
         </div>
       </div>
 
       <div id="tab-settings">
         <div id="settings-div">
-		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/><br/>
+		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/>
+		  Get your Vultr API code <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">here</a>.<br/>
+		  <br/>
 		  <button type="button" id="save_settings">Save</button>
+		</div>
+      </div>
+      
+      <div id="tab-about">
+        <div id="about-div">
+		  <img src="icons/icon128.png"/><h4>Webmaster Tool</h4><br/>
+		  Developed by <a target="_blank" href="https://steemit.com/@yuxi">@yuxi</a><br/>
+          Github: <a target="_blank" href="https://github.com/yuxir">https://github.com/yuxir</a>
 		</div>
       </div>
     </div>
@@ -53,5 +68,4 @@
     </div>
   </body>
 </html>
-
 
