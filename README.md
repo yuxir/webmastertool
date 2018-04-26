@@ -19,9 +19,13 @@ Bootstrap
 
 
 **Vultr account information**: Users can view their balance, pending charges etc
+
 **Vultr server information**: All VPS servers will be listed here with all necessary information, e.g. Server state, current status, location, IP, RAM, and storage.
+
 **Vultr backup information**: All backups are listed here.
+
 **Vultr snapshot information**: All snapshots are listed here.
+
 **Settings**: In the current version, user can set their Vultr API key here to enable all features under Vultr tab.
 
 ## Roadmap
