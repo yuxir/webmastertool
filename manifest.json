@@ -3,7 +3,7 @@
   "author":     "yuxi<yuxibk@gmail.com>",
   "name":       "Webmaster Tool",
   "short_name": "Webmastertool",
-  "version":    "0.1",
+  "version":    "0.0.1",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Webmaster Tool",
@@ -17,7 +17,8 @@
   		"js/*",
         "vendor/*",
         "css/*",
-  		"icons/*"
+  		"icons/*",
+        "webfonts/*"
   ],
   "content_scripts": [{
       "matches": ["<all_urls>"],
@@ -26,6 +27,7 @@
           "vendor/jquery-ui.min.js",
           "vendor/bootstrap.min.js"
       ],
+      "css": ["vendor/fontawesome-all.min.css"],
       "run_at":"document_start"
   }],
   "permissions": [
@@ -35,4 +37,3 @@
      "<all_urls>"
   ]
 }
-
