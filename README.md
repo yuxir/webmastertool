@@ -1,6 +1,8 @@
-Webmaster tool: a chrome extension to view information from various cloud service providers
-
 Please follow me at Steemit: https://steemit.com/@yuxi
+
+# Webmaster tool
+
+Webmaster tool is a chrome extension to view information from various cloud service providers.
 
 ## What is the project about?
 
