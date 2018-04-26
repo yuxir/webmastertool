@@ -2,7 +2,7 @@
 
 const api_url = 'https://api.vultr.com/';
 
-const update_account_info = (api_key, div_id) => {
+const update_vultr_account_info = (api_key, div_id) => {
     if (api_key) {
         // Load Vultr account information
         $.ajax({
@@ -17,19 +17,30 @@ const update_account_info = (api_key, div_id) => {
                 let pending_charges = result['pending_charges'];
                 let last_payment_date = result['last_payment_date'];
                 let last_payment_amount = result['last_payment_amount'];
-                let account_html_block = '';
-                account_html_block += 'Balance: ' + balance + '<br/>';
-                account_html_block += 'Pending charges: ' + pending_charges + '<br/>';
-                account_html_block += 'Last payment date: ' + last_payment_date + '<br/>';
-                account_html_block += 'Last payment account: ' + last_payment_amount + '<br/>';
+				
+                let account_html_block = '<div class="row">';
+
+				account_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
+				if(Math.abs(balance)>Math.abs(pending_charges)) {
+                    account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                }else{
+                    account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
+                }
+                account_html_block += balance + '</div>';
+
+                account_html_block += '<div class="col-sm-4">Pending charges</div><div class="col-sm-8">' + pending_charges + '</div>';
+                account_html_block += '<div class="col-sm-4">Last payment date</div><div class="col-sm-8">' + last_payment_date + '</div>';
+                account_html_block += '<div class="col-sm-4">Last payment amount</div><div class="col-sm-8">' + last_payment_amount + '</div>';
+				account_html_block += '</div>';
+				
                 $("#" + div_id).html(account_html_block);
+                updateStatus('Loaded account information.');
             },
             error: function (request, status, error) {
                 let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
                 updateStatus(html);
             },
             complete: function (data) {
-                updateStatus('Loaded account information.');
             }
         });
     }else{
@@ -38,7 +49,7 @@ const update_account_info = (api_key, div_id) => {
     }
 }
 
-const update_server_info = (api_key, div_id) => {
+const update_vultr_server_info = (api_key, div_id) => {
     if (api_key) {
         // Load Vultr server information
         $.ajax({
@@ -50,21 +61,39 @@ const update_server_info = (api_key, div_id) => {
             success: function (result) {
                 let server_html_block = '';
                 for(var s in result) {
-                    server_html_block += '<h4>Server: ' + result[s]['label']    + '</h4>';
-                    server_html_block += 'Location: '   + result[s]['location'] + '<br/>';
-                    server_html_block += 'IP: '         + result[s]['main_ip']  + '<br/>';
-                    server_html_block += 'Ram: '        + result[s]['ram']      + '<br/>';
-                    server_html_block += 'Disk: '       + result[s]['disk']     + '<br/>';
-                }
+					server_html_block += '<div class="row divblock">';
+					server_html_block += '<div class="col-sm-4">Server</div><div class="col-sm-8">' + result[s]['label'] + '</div>';
 
+                    server_html_block += '<div class="col-sm-4">State</div><div class="col-sm-8">';
+                    if (result[s]['server_state'].trim()=='ok') {
+                        server_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                    }else{
+                        server_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+                    }
+                    server_html_block += ' ' + result[s]['server_state'] + '</div>';
+
+                    server_html_block += '<div class="col-sm-4">Power status</div><div class="col-sm-8">';
+					if (result[s]['power_status'].trim()=='running') {
+                        server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
+                    }else{
+                        server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
+                    }
+                    server_html_block += ' ' + result[s]['power_status'] + '</div>';
+
+					server_html_block += '<div class="col-sm-4">Location</div><div class="col-sm-8">' + result[s]['location'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">IP</div><div class="col-sm-8">' + result[s]['main_ip'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Ram</div><div class="col-sm-8">' + result[s]['ram'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Disk</div><div class="col-sm-8">' + result[s]['disk'] + '</div>';
+					server_html_block += '</div>';
+                }
                 $("#" + div_id).html(server_html_block);
+                updateStatus('Loaded server information.');
             },
             error: function (request, status, error) {
                 let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
                 updateStatus(html);
             },
             complete: function (data) {
-                updateStatus('Loaded server information.');
             }
         });
     }else{
@@ -73,7 +102,7 @@ const update_server_info = (api_key, div_id) => {
     }
 }
 
-const update_backup_info = (api_key, div_id) => {
+const update_vultr_backup_info = (api_key, div_id) => {
     if (api_key) {
         // Load Vultr backup information
         $.ajax({
@@ -85,21 +114,23 @@ const update_backup_info = (api_key, div_id) => {
             success: function (result) {
                 let backup_html_block = '';
                 for(var s in result) {
-                    backup_html_block += '<h4>Description: ' + result[s]['description']    + '</h4>';
-                    backup_html_block += 'ID: '              + result[s]['BACKUPID']  + '<br/>';
-                    backup_html_block += 'Date: '            + result[s]['date_created'] + '<br/>';
-                    backup_html_block += 'Size: '            + parseFloat(result[s]['size'])/(1024*1024*1024) + ' GB<br/>';
-                    backup_html_block += 'Status: '          + result[s]['status']     + '<br/>';
+					backup_html_block += '<div class="row divblock">';
+					backup_html_block += '<div class="col-sm-4">Description</div><div class="col-sm-8">' + result[s]['description'] + '</div>';
+                    backup_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result[s]['BACKUPID'] + '</div>';
+					backup_html_block += '<div class="col-sm-4">Date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
+					backup_html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + parseFloat(result[s]['size'])/(1024*1024*1024) + ' GB' + '</div>';
+                    backup_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">' + result[s]['status'] + '</div>';
+                    backup_html_block += '</div>';
                 }
 
                 $("#" + div_id).html(backup_html_block);
+                updateStatus('Loaded backup information.');
             },
             error: function (request, status, error) {
                 let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
                 updateStatus(html);
             },
             complete: function (data) {
-                updateStatus('Loaded backup information.');
             }
         });
     }else{
@@ -108,7 +139,7 @@ const update_backup_info = (api_key, div_id) => {
     }
 }
 
-const update_snapshot_info = (api_key, div_id) => {
+const update_vultr_snapshot_info = (api_key, div_id) => {
     if (api_key) {
         // Load Vultr snapshot information
         $.ajax({
@@ -120,21 +151,23 @@ const update_snapshot_info = (api_key, div_id) => {
             success: function (result) {
                 let snapshot_html_block = '';
                 for(var s in result) {
-                    snapshot_html_block += '<h4>Description: ' + result[s]['description']    + '</h4>';
-                    snapshot_html_block += 'ID: '              + result[s]['SNAPSHOTID']  + '<br/>';
-                    snapshot_html_block += 'Date: '            + result[s]['date_created'] + '<br/>';
-                    snapshot_html_block += 'Size: '            + parseFloat(result[s]['size'])/(1024*1024*1024) + ' GB<br/>';
-                    snapshot_html_block += 'Status: '          + result[s]['status']     + '<br/>';
+					snapshot_html_block += '<div class="row divblock">';
+					snapshot_html_block += '<div class="col-sm-4">Description</div><div class="col-sm-8">' + result[s]['description'] + '</div>';
+                    snapshot_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result[s]['SNAPSHOTID'] + '</div>';
+					snapshot_html_block += '<div class="col-sm-4">Date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
+					snapshot_html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + parseFloat(result[s]['size'])/(1024*1024*1024) + ' GB' + '</div>';
+                    snapshot_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">' + result[s]['status'] + '</div>';
+                    snapshot_html_block += '</div>';
                 }
 
                 $("#" + div_id).html(snapshot_html_block);
+                updateStatus('Loaded snapshot information.');
             },
             error: function (request, status, error) {
                 let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
                 updateStatus(html);
             },
             complete: function (data) {
-                updateStatus('Loaded snapshot information.');
             }
         });
     }else{
@@ -143,3 +176,36 @@ const update_snapshot_info = (api_key, div_id) => {
     }
 }
 
+const update_vultr_dns_info = (api_key, div_id) => {
+    if (api_key) {
+        // Load Vultr DNS information
+        $.ajax({
+            type: "GET",
+            url: 'https://api.vultr.com/v1/dns/list',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('API-Key', api_key);
+            },
+            success: function (result) {
+                let dns_html_block = '';
+                for(var s in result) {
+					dns_html_block += '<div class="row divblock">';
+					dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + result[s]['domain'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Creation date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
+                    dns_html_block += '</div>';
+                }
+
+                $("#" + div_id).html(dns_html_block);
+                updateStatus('Loaded DNS information.');
+            },
+            error: function (request, status, error) {
+                let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
+                updateStatus(html);
+            },
+            complete: function (data) {
+            }
+        });
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
