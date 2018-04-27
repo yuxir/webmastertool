@@ -28,24 +28,30 @@ const loadSettings = () => {
 
 // save settings
 const saveSettings = () => {
-	if($('input#vultr_api_key').val()) {
         let settings = {};
-        settings['vultr_api_key'] = $('input#vultr_api_key').val();
+	if($('input#vultr_api_key').val() || $('input#do_api_key').val()) {
+          if($('input#vultr_api_key').val()) {
+            settings['vultr_api_key'] = $('input#vultr_api_key').val();
 
-        update_vultr_account_info($('input#vultr_api_key').val(),  'vultr-account');
-        update_vultr_server_info($('input#vultr_api_key').val(),   'vultr-server');
-        update_vultr_backup_info($('input#vultr_api_key').val(),   'vultr-backup');
-        update_vultr_snapshot_info($('input#vultr_api_key').val(), 'vultr-snapshot');
-        update_vultr_dns_info($('input#vultr_api_key').val(), 'vultr-dns');
+            update_vultr_account_info($('input#vultr_api_key').val(),  'vultr-account');
+            update_vultr_server_info($('input#vultr_api_key').val(),   'vultr-server');
+            update_vultr_backup_info($('input#vultr_api_key').val(),   'vultr-backup');
+            update_vultr_snapshot_info($('input#vultr_api_key').val(), 'vultr-snapshot');
+            update_vultr_dns_info($('input#vultr_api_key').val(), 'vultr-dns');
+          }
+          if($('input#do_api_key').val()) {
+            settings['do_api_key'] = $('input#do_api_key').val();
 
-        chrome.storage.sync.set({ 
+            update_do_account_info($('input#do_api_key').val(),  'do-account');
+          }
+          chrome.storage.sync.set({ 
             'webmastertool': settings
-        }, function() {
+          }, function() {
             updateStatus("Saved settings.");
-        });
+          });
 	}else{
-        updateStatus('<span style="color:red;">Invalid API key.</span>');
-    }
+          updateStatus('<span style="color:red;">Invalid API key.</span>');
+        }
 }
 
 // when content loaded
