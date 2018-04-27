@@ -27,7 +27,7 @@
           "vendor/jquery-ui.min.js",
           "vendor/bootstrap.min.js"
       ],
-      "css": ["vendor/font-awesome.min.css"],
+      "css": ["vendor/fontawesome-all.min.css"],
       "run_at":"document_start"
   }],
   "permissions": [
