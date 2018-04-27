@@ -18,6 +18,7 @@
     <div id="tabs">
       <ul>
         <li><a id="vultr"    href="#tab-vultr">Vultr</a></li>
+        <li><a id="do"       href="#tab-do">Digital Ocean</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
@@ -47,11 +48,27 @@
         </div>
       </div>
 
+      <div id="tab-do">
+        <div id="do-div">
+          <h3>Account</h3>
+          <div id="do-account">
+          </div>
+
+          <h3>Droplets</h3>
+          <div id="do-droplets">
+          </div>
+
+        </div>
+      </div>
+
       <div id="tab-settings">
         <div id="settings-div">
 		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/>
 		  Get your Vultr API code <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">here</a>.<br/>
 		  <br/>
+                  Digital Ocean API key: <input type="text" id="do_api_key" size="80"/><br/>
+                  Get your DO API code <a target="_blank" href="https://cloud.digitalocean.com/settings/api">here</a>.<br/>
+                  <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>
       </div>
