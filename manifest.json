@@ -3,7 +3,7 @@
   "author":     "yuxi<yuxibk@gmail.com>",
   "name":       "Webmaster Tool",
   "short_name": "Webmastertool",
-  "version":    "0.0.3",
+  "version":    "0.0.4",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Webmaster Tool",
@@ -14,10 +14,10 @@
   "update_url":"http://clients2.google.com/service/update2/crx",
   "description": "Webmaster tool",
   "web_accessible_resources": [
-  		"js/*",
+        "js/*",
         "vendor/*",
         "css/*",
-  		"icons/*",
+  	"icons/*",
         "webfonts/*"
   ],
   "content_scripts": [{
