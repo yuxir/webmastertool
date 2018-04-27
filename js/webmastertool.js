@@ -36,7 +36,7 @@ const saveSettings = () => {
         update_vultr_server_info($('input#vultr_api_key').val(),   'vultr-server');
         update_vultr_backup_info($('input#vultr_api_key').val(),   'vultr-backup');
         update_vultr_snapshot_info($('input#vultr_api_key').val(), 'vultr-snapshot');
-        update_vultr_dns_info(settings.webmastertool['vultr_api_key'], 'vultr-dns');
+        update_vultr_dns_info('input#vultr_api_key').val(), 'vultr-dns');
                 
         chrome.storage.sync.set({ 
             'webmastertool': settings
