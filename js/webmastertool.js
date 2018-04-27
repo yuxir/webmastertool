@@ -37,7 +37,7 @@ const saveSettings = () => {
         update_vultr_backup_info($('input#vultr_api_key').val(),   'vultr-backup');
         update_vultr_snapshot_info($('input#vultr_api_key').val(), 'vultr-snapshot');
         update_vultr_dns_info($('input#vultr_api_key').val(), 'vultr-dns');
-                
+
         chrome.storage.sync.set({ 
             'webmastertool': settings
         }, function() {
@@ -56,11 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
         $("#vultr-div").accordion({ 
             heightStyle: "content" 
         });
-		
+        $("#do-div").accordion({
+            heightStyle: "content"
+        });
         loadSettings();
     });
-	
-	$('button#save_settings').click(function() {
+    $('button#save_settings').click(function() {
         saveSettings();
     });
 
