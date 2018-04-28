@@ -9,7 +9,7 @@ const update_do_account_info = (api_key, div_id) => {
             type: "GET",
             url: do_api_url + 'account',
             beforeSend: function (xhr) {
-                xhr.setRequestHeader('Bearer', api_key);
+                xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
             success: function (result) {
                 let status            = result['account']['status'];
