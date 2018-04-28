@@ -8,21 +8,27 @@ const updateStatus = (message) => {
 // load settings
 const loadSettings = () => {
 	chrome.storage.sync.get('webmastertool', function(settings) {
-		if(settings && settings.webmastertool) {
+	  if(settings && settings.webmastertool) {
             $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
             if(settings.webmastertool['vultr_api_key']) {
-                update_vultr_account_info(settings.webmastertool['vultr_api_key'],  'vultr-account');
-                update_vultr_server_info(settings.webmastertool['vultr_api_key'],   'vultr-server');
-                update_vultr_backup_info(settings.webmastertool['vultr_api_key'],   'vultr-backup');
-                update_vultr_snapshot_info(settings.webmastertool['vultr_api_key'], 'vultr-snapshot');
-                update_vultr_dns_info(settings.webmastertool['vultr_api_key'], 'vultr-dns');
+              update_vultr_account_info(settings.webmastertool['vultr_api_key'],  'vultr-account');
+              update_vultr_server_info(settings.webmastertool['vultr_api_key'],   'vultr-server');
+              update_vultr_backup_info(settings.webmastertool['vultr_api_key'],   'vultr-backup');
+              update_vultr_snapshot_info(settings.webmastertool['vultr_api_key'], 'vultr-snapshot');
+              update_vultr_dns_info(settings.webmastertool['vultr_api_key'], 'vultr-dns');
             }else{
-                updateStatus("Empty Vultr API Key.");
+              updateStatus("Empty Vultr API Key.");
             }
-		}else{
-			$('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
+            if(settings.webmastertool['do_api_key']) {
+              update_do_account_info(settings.webmastertool['do_api_key'],  'do-account');
+            }else{
+              updateStatus("Empty DO API Key.");
+            }
+	  }else{
+	    $('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
+            $('input#do_api_key').val('YOUR_DO_API_KEY');
             updateStatus("Cannot load settings.");
-		}
+          }
 	});
 }
 
