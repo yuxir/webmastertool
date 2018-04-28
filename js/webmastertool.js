@@ -9,8 +9,9 @@ const updateStatus = (message) => {
 const loadSettings = () => {
 	chrome.storage.sync.get('webmastertool', function(settings) {
 	  if(settings && settings.webmastertool) {
-            $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
+            // Load DO API key to UI
             if(settings.webmastertool['vultr_api_key']) {
+              $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
               update_vultr_account_info(settings.webmastertool['vultr_api_key'],  'vultr-account');
               update_vultr_server_info(settings.webmastertool['vultr_api_key'],   'vultr-server');
               update_vultr_backup_info(settings.webmastertool['vultr_api_key'],   'vultr-backup');
@@ -19,7 +20,10 @@ const loadSettings = () => {
             }else{
               updateStatus("Empty Vultr API Key.");
             }
+
+            // Load DO API key to UI
             if(settings.webmastertool['do_api_key']) {
+              $('input#do_api_key').val(settings.webmastertool['do_api_key']);
               update_do_account_info(settings.webmastertool['do_api_key'],  'do-account');
             }else{
               updateStatus("Empty DO API Key.");

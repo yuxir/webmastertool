@@ -13,7 +13,7 @@ const update_do_account_info = (api_key, div_id) => {
             },
             success: function (result) {
                 let status            = result['account']['status'];
-				let email             = result['account']['email'];
+		let email             = result['account']['email'];
                 let droplet_limit     = result['account']['droplet_limit'];
                 let floating_ip_limit = result['account']['floating_ip_limit'];
 
@@ -30,7 +30,7 @@ const update_do_account_info = (api_key, div_id) => {
                 account_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">' + email + '</div>';
                 account_html_block += '<div class="col-sm-4">Droplet limit</div><div class="col-sm-8">' + droplet_limit + '</div>';
                 account_html_block += '<div class="col-sm-4">Floating IP limit</div><div class="col-sm-8">' + droplet_limit + '</div>';
-                                account_html_block += '</div>';
+                account_html_block += '</div>';
 
                 $("#" + div_id).html(account_html_block);
                 updateStatus('Loaded account information.');
