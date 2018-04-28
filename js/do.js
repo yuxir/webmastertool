@@ -48,3 +48,48 @@ const update_do_account_info = (api_key, div_id) => {
     }
 }
 
+const update_do_droplets_info = (api_key, div_id) => {
+    if (api_key) {
+        // Load DO droplets information
+        $.ajax({
+            type: "GET",
+            url: do_api_url + 'droplets',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', "Bearer " + api_key);
+            },
+            success: function (result) {
+                let server_html_block = '';
+                for(var s in result["droplets"]) {
+		    server_html_block += '<div class="row divblock">';
+		    server_html_block += '<div class="col-sm-4">Server</div><div class="col-sm-8">' + result["droplets"][s]['name'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Region</div><div class="col-sm-8">' + result["droplets"][s]['region']['name'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
+                    if (result["droplets"][s]['status'].trim()=='active') {
+                        server_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                    }else{
+                        server_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+                    }
+                    server_html_block += ' ' + result["droplets"][s]['status'] + '</div>';
+
+                    server_html_block += '<div class="col-sm-4">Memory</div><div class="col-sm-8">' + result["droplets"][s]['memory'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Disk</div><div class="col-sm-8">' + result["droplets"][s]['disk'] + ' GB</div>';
+                    server_html_block += '<div class="col-sm-4">Kernel</div><div class="col-sm-8">' + result["droplets"][s]['kernel']['name'] + ' GB</div>';
+                    server_html_block += '<div class="col-sm-4">Price monthly</div><div class="col-sm-8">$ ' + result["droplets"][s]['size']['price_monthly'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Price hourly</div><div class="col-sm-8">$ ' + result["droplets"][s]['size']['price_hourly'] + '</div>';
+   		    server_html_block += '</div>';
+                }
+                $("#" + div_id).html(server_html_block);
+                updateStatus('Loaded droplets information.');
+            },
+            error: function (request, status, error) {
+                let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
+                updateStatus(html);
+            },
+            complete: function (data) {
+            }
+        });
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}

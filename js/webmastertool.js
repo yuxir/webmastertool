@@ -25,6 +25,7 @@ const loadSettings = () => {
             if(settings.webmastertool['do_api_key']) {
               $('input#do_api_key').val(settings.webmastertool['do_api_key']);
               update_do_account_info(settings.webmastertool['do_api_key'],  'do-account');
+              update_do_droplets_info(settings.webmastertool['do_api_key'], 'do-droplets');
             }else{
               updateStatus("Empty DO API Key.");
             }
@@ -53,6 +54,7 @@ const saveSettings = () => {
             settings['do_api_key'] = $('input#do_api_key').val();
 
             update_do_account_info($('input#do_api_key').val(),  'do-account');
+            update_do_droplets_info($('input#do_api_key').val(), 'do-droplets');
           }
           chrome.storage.sync.set({ 
             'webmastertool': settings
