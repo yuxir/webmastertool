@@ -26,6 +26,9 @@ const loadSettings = () => {
               $('input#do_api_key').val(settings.webmastertool['do_api_key']);
               update_do_account_info(settings.webmastertool['do_api_key'],  'do-account');
               update_do_droplets_info(settings.webmastertool['do_api_key'], 'do-droplets');
+              update_do_snapshots_info(settings.webmastertool['do_api_key'], 'do-snapshots');
+              update_do_domains_info(settings.webmastertool['do_api_key'], 'do-domains');
+              update_do_sshkeys_info(settings.webmastertool['do_api_key'], 'do-sshkeys');
             }else{
               updateStatus("Empty DO API Key.");
             }
@@ -55,6 +58,9 @@ const saveSettings = () => {
 
             update_do_account_info($('input#do_api_key').val(),  'do-account');
             update_do_droplets_info($('input#do_api_key').val(), 'do-droplets');
+            update_do_snapshots_info($('input#do_api_key').val(), 'do-snapshots');
+            update_do_domains_info($('input#do_api_key').val(), 'do-domains');
+            update_do_sshkeys_info($('input#do_api_key').val(), 'do-sshkeys');
           }
           chrome.storage.sync.set({ 
             'webmastertool': settings
