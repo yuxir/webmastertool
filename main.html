@@ -7,6 +7,7 @@
     <script src="vendor/jquery-ui.min.js"></script>
     <script src="vendor/bootstrap.min.js"></script>
     <script src="js/vultr.js"></script>
+    <script src="js/do.js"></script>
     <script src="js/webmastertool.js"></script>
 
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
@@ -17,33 +18,58 @@
   <body class="main-window">
     <div id="tabs">
       <ul>
-        <li><a id="vultr"    href="#tab-vultr">Vultr</a></li>
+        <li><img src="images/vultr.jpg" class="tabheadimg"/><a id="vultr"    href="#tab-vultr">Vultr</a></li>
+        <li><img src="images/do.jpg" class="tabheadimg"/><a id="do"       href="#tab-do">Digital Ocean</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
 
       <div id="tab-vultr">
         <div id="vultr-div">
-          <h3>Account information</h3>
+          <h3>Account information <i class="fa fa-user"></i></h3>
           <div id="vultr-account">
           </div>
 
-          <h3>Server</h3>
+          <h3>Server <i class="fa fa-server"></i></h3>
           <div id="vultr-server">
           </div>
 
-          <h3>Backup</h3>
+          <h3>Backup <i class="fa fa-hdd"></i></h3>
           <div id="vultr-backup">
           </div>
 
-          <h3>Snapshot</h3>
+          <h3>Snapshot <i class="fa fa-microchip"></i></h3>
           <div id="vultr-snapshot">
           </div>
           
-          <h3>DNS</h3>
+          <h3>DNS <i class="fa fa-globe"></i></h3>
           <div id="vultr-dns">
           </div>
 
+        </div>
+      </div>
+
+      <div id="tab-do">
+        <div id="do-div">
+          <h3>Account <i class="fa fa-user"></i></h3>
+          <div id="do-account">
+          </div>
+
+          <h3>Droplets <i class="fa fa-server"></i></h3>
+          <div id="do-droplets">
+          </div>
+
+          <h3>Snapshots <i class="fa fa-microchip"></i></h3>
+          <div id="do-snapshots">
+          </div>
+          
+          <h3>Domains <i class="fa fa-globe"></i></h3>
+          <div id="do-domains">
+          </div>
+          
+          <h3>SSH Keys <i class="fa fa-key"></i></h3>
+          <div id="do-sshkeys">
+          </div>
         </div>
       </div>
 
@@ -51,7 +77,13 @@
         <div id="settings-div">
 		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/>
 		  Get your Vultr API code <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">here</a>.<br/>
+          <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>Show Vultr tab<br/>
 		  <br/>
+          
+          Digital Ocean API key: <input type="text" id="do_api_key" size="80"/><br/>
+          Get your DO API code <a target="_blank" href="https://cloud.digitalocean.com/settings/api">here</a>.<br/>
+          <input type="checkbox" id="show_do_box" name="show_do_box"/>Show Digital Ocean tab<br/>
+          <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>
       </div>
