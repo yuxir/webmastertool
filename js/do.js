@@ -11,9 +11,9 @@ const update_do_account_info = (api_key, div_id) => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
-            success: function (result) {
+            success: function (result) {  // update account info
                 let status            = result['account']['status'];
-		let email             = result['account']['email'];
+		        let email             = result['account']['email'];
                 let droplet_limit     = result['account']['droplet_limit'];
                 let floating_ip_limit = result['account']['floating_ip_limit'];
 
@@ -59,9 +59,9 @@ const update_do_droplets_info = (api_key, div_id) => {
             },
             success: function (result) {
                 let server_html_block = '';
-                for(var s in result["droplets"]) {
-		    server_html_block += '<div class="row divblock">';
-		    server_html_block += '<div class="col-sm-4">Server name</div><div class="col-sm-8">' + result["droplets"][s]['name'] + '</div>';
+                for(var s in result["droplets"]) {  // update droplet info
+		            server_html_block += '<div class="row divblock">';
+		            server_html_block += '<div class="col-sm-4">Server name</div><div class="col-sm-8">' + result["droplets"][s]['name'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Region</div><div class="col-sm-8">' + result["droplets"][s]['region']['name'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
                     if (result["droplets"][s]['status'].trim()=='active') {
@@ -106,7 +106,7 @@ const update_do_snapshots_info = (api_key, div_id) => {
             },
             success: function (result) {
                 let server_html_block = '';
-                for(var s in result["snapshots"]) {
+                for(var s in result["snapshots"]) {  // update snapshots info
 		           server_html_block += '<div class="row divblock">';
                    server_html_block += '<div class="col-sm-4">Snapshot</div><div class="col-sm-8">' + result["snapshots"][s]['name'] + '</div>';
                    server_html_block += '<div class="col-sm-4">Region</div><div class="col-sm-8">' + result["snapshots"][s]['regions'][0] + '</div>';
@@ -114,7 +114,7 @@ const update_do_snapshots_info = (api_key, div_id) => {
                    server_html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + result["snapshots"][s]['size_gigabytes'] + ' GB</div>';
                    server_html_block += '<div class="col-sm-4">Minimal disk size when restore</div><div class="col-sm-8">' + result["snapshots"][s]['min_disk_size'] + ' GB</div>';
                     
-   		            server_html_block += '</div>';
+   		           server_html_block += '</div>';
                 }
                 $("#" + div_id).html(server_html_block);
                 updateStatus('Loaded snapshots information.');
@@ -141,7 +141,7 @@ const update_do_domains_info = (api_key, div_id) => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
-            success: function (result) {
+            success: function (result) {  // update domain info
                 let domains_html_block = '';
                 for(var s in result["domains"]) {
 		           domains_html_block += '<div class="row divblock">';
@@ -177,7 +177,7 @@ const update_do_sshkeys_info = (api_key, div_id) => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
-            success: function (result) {
+            success: function (result) {  // update SSH keys
                 let sshkeys_html_block = '';
                 for(var s in result["ssh_keys"]) {
 		           sshkeys_html_block += '<div class="row divblock">';
