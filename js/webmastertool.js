@@ -11,7 +11,7 @@ const loadSettings = () => {
 	  if(settings && settings.webmastertool) {
             // show/hide Vultr tab
             if(settings.webmastertool['show_vultr_tab']=='yes'){
-                // make show vultr tab checkboxed ticked
+                // make 'show vultr tab' checkboxed ticked
                 $("input#show_vultr_box").prop('checked', 'true');
                 // show Vultr tab
                 $("div#tabs ul li:eq(0)").css("display", "block");
@@ -19,12 +19,12 @@ const loadSettings = () => {
                 // hide Vultr tab
                 $("div#tabs ul li:eq(0)").css("display", "none");
                 // make settings tab as default
-                $( "#tabs" ).tabs({ active: 2 });
+                $( "#tabs" ).tabs({ active: 3 });
             }
             
             // show/hide DO tab
             if(settings.webmastertool['show_do_tab']=='yes'){
-                // make show DO tab checkboxed ticked
+                // make 'show DO tab' checkboxed ticked
                 $("input#show_do_box").prop('checked', 'true');
                 // show DO tab
                 $("div#tabs ul li:eq(1)").css("display", "block");
@@ -32,7 +32,20 @@ const loadSettings = () => {
                 // hide DO tab
                 $("div#tabs ul li:eq(1)").css("display", "none");
                 // make settings tab as default
-                $( "#tabs" ).tabs({ active: 2 });
+                $( "#tabs" ).tabs({ active: 3 });
+            }
+            
+            // show/hide Linode tab
+            if(settings.webmastertool['show_linode_tab']=='yes'){
+                // make 'show linode tab' checkboxed ticked
+                $("input#show_linode_box").prop('checked', 'true');
+                // show linode tab
+                $("div#tabs ul li:eq(2)").css("display", "block");
+            }else{
+                // hide linode tab
+                $("div#tabs ul li:eq(2)").css("display", "none");
+                // make settings tab as default
+                $( "#tabs" ).tabs({ active: 3 });
             }
             
             // Load Vultr API key to UI
@@ -70,13 +83,31 @@ const loadSettings = () => {
               $("div#tabs ul li:eq(1)").css("display", "none");  
               updateStatus("Empty DO API Key.");
             }
+            
+            // Load linode API key to UI
+            if(settings.webmastertool['linode_api_key']) {
+              $('input#linode_api_key').val(settings.webmastertool['linode_api_key']);
+              
+              // only show linode tab if the linode checkbox is ticked in settings
+              if(settings.webmastertool['show_linode_tab']=='yes'){
+                  update_linode_account_info(settings.webmastertool['linode_api_key'],  'linode-account');
+                  update_linode_profile_info(settings.webmastertool['linode_api_key'],  'linode-profile');
+                  update_linode_invoices_info(settings.webmastertool['linode_api_key'],  'linode-invoices');
+                  update_linode_instances_info(settings.webmastertool['linode_api_key'],  'linode-instances');
+              }
+            }else{
+              // hide linode tab if linode API key is not present
+              $("div#tabs ul li:eq(2)").css("display", "none");  
+              updateStatus("Empty linode API Key.");
+            }
 	  }else{
         // set default value for UI elements  
 	    $('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
         $('input#do_api_key').val('YOUR_DO_API_KEY');
-        $("div#tabs ul li:eq(0)").css("display", "none");
-        $("div#tabs ul li:eq(1)").css("display", "none");
-        $( "#tabs" ).tabs({ active: 2 });
+        $("div#tabs ul li:eq(0)").css("display", "none");  // hide vultr tab
+        $("div#tabs ul li:eq(1)").css("display", "none");  // hide do tab
+        $("div#tabs ul li:eq(2)").css("display", "none");  // hide linode tab
+        $( "#tabs" ).tabs({ active: 3 });
         
         updateStatus("Cannot load settings.");
       }
@@ -111,9 +142,22 @@ const saveSettings = () => {
         $("div#tabs ul li:eq(1)").css("display", "none");
         // save 'show DO tab' option to settings
         settings['show_do_tab'] = 'no';
-    }     
+    }  
+
+    // show/hide 'linode' tab
+    if($('#show_linode_box').is(":checked")) {
+        // show linode tab
+        $("div#tabs ul li:eq(2)").css("display", "block");
+        // save 'show linode tab' option to settings
+        settings['show_linode_tab'] = 'yes';
+    }else{
+        // hide linode tab
+        $("div#tabs ul li:eq(2)").css("display", "none");
+        // save 'show linode tab' option to settings
+        settings['show_linode_tab'] = 'no';
+    }      
     
-    if($('input#vultr_api_key').val() || $('input#do_api_key').val()) {
+    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val()) {
         // If API key is valid
         if($('input#vultr_api_key').val()) {
             // Save setting
@@ -147,6 +191,24 @@ const saveSettings = () => {
                 $("div#tabs ul li:eq(1)").css("display", "none");
             }    
         }
+        
+        // If linode API key is valid
+        if($('input#linode_api_key').val()) {
+            settings['linode_api_key'] = $('input#linode_api_key').val();
+            
+            // only update linode tab if show 'linode' checkbox is ticked
+            if(($('#show_linode_box:checked').length > 0)) {  
+                $("div#tabs ul li:eq(2)").css("display", "block");
+                update_linode_account_info($('input#linode_api_key').val(),  'linode-account'); 
+                update_linode_profile_info($('input#linode_api_key').val(),  'linode-profile');  
+                update_linode_invoices_info($('input#linode_api_key').val(),  'linode-invoices');
+                update_linode_instances_info($('input#linode_api_key').val(),  'linode-instances');
+                
+            }else{
+                // hide linode tab
+                $("div#tabs ul li:eq(2)").css("display", "none");
+            }    
+        }
 	}else{
         updateStatus('<span style="color:red;">Invalid API key.</span>');
     }
@@ -167,6 +229,9 @@ document.addEventListener('DOMContentLoaded', function() {
             heightStyle: "content" 
         });
         $("#do-div").accordion({
+            heightStyle: "content"
+        });
+        $("#linode-div").accordion({
             heightStyle: "content"
         });
         // Load settings to UI
