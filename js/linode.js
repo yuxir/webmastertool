@@ -20,13 +20,12 @@ const update_linode_account_info = (api_key, div_id) => {
                 let balance   = result['balance']
                 let phone     = result['phone']
                 let email     = result['email']
-                
+
                 let account_html_block = '<div class="row">';
                 account_html_block += '<div class="col-sm-4">Address</div><div class="col-sm-8">' + address_1 + '<br/>' + address_2 + '<br/>' + city + ' ' + country + ' ' + postcode + '</div>';
                 account_html_block += '<div class="col-sm-4">Phone</div><div class="col-sm-8">'   + phone + '</div>';
                 account_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">'   + email + '</div>';
                 account_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">' + balance + '</div>';
-                
                 account_html_block += '</div>';
 
                 $("#" + div_id).html(account_html_block);
@@ -47,36 +46,33 @@ const update_linode_account_info = (api_key, div_id) => {
 
 const update_linode_profile_info = (api_key, div_id) => {
     if (api_key) {
-        // Load linode profile information
-        let request = new Request(linode_api_url + 'profile', {
-            method: 'GET', 
-            headers: new Headers({
-              'Authorization': "Bearer " + api_key
-            })
-        });
+        let options = {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer 59cd75a3013a12e795b74ee3ffc2ef535b9e7220778a2a703f8eb078f4dfc848'
+            }
+        };
 
-        fetch(request)
-        .then(function(response) {
-          response.json().then(function(data) {
+        fetch(linode_api_url + 'profile', options).then(function(response) {
+          return response.json();
+        }).then(function(data) {
             let profile_html_block = '<div class="row">';
             profile_html_block += '<div class="col-sm-4">Username</div><div class="col-sm-8">' + data['username'] + '</div>';
-            profile_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">' + data['email'] + '</div>'; 
-            profile_html_block += '<div class="col-sm-4">Two factor auth enabled</div><div class="col-sm-8">' + data['two_factor_auth'] + '</div>'; 
-            profile_html_block += '<div class="col-sm-4">Referrals code</div><div class="col-sm-8">' + data['referrals']['code'] + '</div>'; 
-            profile_html_block += '<div class="col-sm-4">Referral URL</div><div class="col-sm-8">' + data['referrals']['url'] + '</div>'; 
+            profile_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">' + data['email'] + '</div>';
+            profile_html_block += '<div class="col-sm-4">Two factor auth enabled</div><div class="col-sm-8">' + data['two_factor_auth'] + '</div>';
+            profile_html_block += '<div class="col-sm-4">Referrals code</div><div class="col-sm-8">' + data['referrals']['code'] + '</div>';
+            profile_html_block += '<div class="col-sm-4">Referral URL</div><div class="col-sm-8">' + data['referrals']['url'] + '</div>';
             profile_html_block += '<div class="col-sm-4">Referrals</div><div class="col-sm-8">';
             profile_html_block += 'Completed: ' + data['referrals']['completed'] + '<br/>';
             profile_html_block += 'Total: '   + data['referrals']['total'] + '<br/>';
             profile_html_block += 'Pending: ' + data['referrals']['pending'] + '<br/>';
             profile_html_block += 'Credit: '  + data['referrals']['credit'];
-            profile_html_block += '</div>'; 
+            profile_html_block += '</div>';
             profile_html_block += '</div>';
 
             $("#" + div_id).html(profile_html_block);
             updateStatus('Loaded profile information.');
-          });
-        })
-        .catch(function(err) {
+        }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
         });
