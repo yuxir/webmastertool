@@ -104,9 +104,9 @@ const loadSettings = () => {
         // set default value for UI elements
 	    $('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
         $('input#do_api_key').val('YOUR_DO_API_KEY');
-        $("div#tabs ul li:eq(0)").css("display", "none");  // hide vultr tab
-        $("div#tabs ul li:eq(1)").css("display", "none");  // hide do tab
-        $("div#tabs ul li:eq(2)").css("display", "none");  // hide linode tab
+        $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
+        $("div#tabs ul li:eq(2)").css("display", "none");  // hide do tab
+        $("div#tabs ul li:eq(3)").css("display", "none");  // hide linode tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
@@ -121,12 +121,12 @@ const saveSettings = () => {
     // show/hide 'Vultr' tab
     if($('#show_vultr_box').is(":checked")) {
         // show vultr tab
-        $("div#tabs ul li:eq(0)").css("display", "block");
+        $("div#tabs ul li:eq(1)").css("display", "block");
         // save 'show vultr tab' option to settings
         settings['show_vultr_tab'] = 'yes';
     }else{
         // hide vultr tab
-        $("div#tabs ul li:eq(0)").css("display", "none");
+        $("div#tabs ul li:eq(1)").css("display", "none");
         // save 'show vultr tab' option to settings
         settings['show_vultr_tab'] = 'no';
     } 
@@ -134,12 +134,12 @@ const saveSettings = () => {
     // show/hide 'DO' tab
     if($('#show_do_box').is(":checked")) {
         // show DO tab
-        $("div#tabs ul li:eq(1)").css("display", "block");
+        $("div#tabs ul li:eq(2)").css("display", "block");
         // save 'show DO tab' option to settings
         settings['show_do_tab'] = 'yes';
     }else{
         // hide DO tab
-        $("div#tabs ul li:eq(1)").css("display", "none");
+        $("div#tabs ul li:eq(2)").css("display", "none");
         // save 'show DO tab' option to settings
         settings['show_do_tab'] = 'no';
     }  
@@ -147,12 +147,12 @@ const saveSettings = () => {
     // show/hide 'linode' tab
     if($('#show_linode_box').is(":checked")) {
         // show linode tab
-        $("div#tabs ul li:eq(2)").css("display", "block");
+        $("div#tabs ul li:eq(3)").css("display", "block");
         // save 'show linode tab' option to settings
         settings['show_linode_tab'] = 'yes';
     }else{
         // hide linode tab
-        $("div#tabs ul li:eq(2)").css("display", "none");
+        $("div#tabs ul li:eq(3)").css("display", "none");
         // save 'show linode tab' option to settings
         settings['show_linode_tab'] = 'no';
     }
