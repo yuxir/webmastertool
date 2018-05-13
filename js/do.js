@@ -48,7 +48,7 @@ const update_do_account_info = (api_key, div_id) => {
     }
 }
 
-const update_do_droplets_info = (api_key, div_id) => {
+const update_do_droplets_info = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
         // Load DO droplets information
         $.ajax({
@@ -59,8 +59,10 @@ const update_do_droplets_info = (api_key, div_id) => {
             },
             success: function (result) {
                 let server_html_block = '';
+                let dashboard_server_html_block = '';
                 for(var s in result["droplets"]) {  // update droplet info
 		            server_html_block += '<div class="row divblock">';
+                    dashboard_server_html_block += '<div class="row">';
 		            server_html_block += '<div class="col-sm-4">Server name</div><div class="col-sm-8">' + result["droplets"][s]['name'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Region</div><div class="col-sm-8">' + result["droplets"][s]['region']['name'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
@@ -70,6 +72,15 @@ const update_do_droplets_info = (api_key, div_id) => {
                         server_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
                     }
                     server_html_block += ' ' + result["droplets"][s]['status'] + '</div>';
+                    
+                    dashboard_server_html_block += '<div class="col-sm-4">DO server: ' + result["droplets"][s]['name'] + '</div>';
+                    dashboard_server_html_block += '<div class="col-sm-8">';
+					if (result["droplets"][s]['status'].trim()=='active') {
+                        dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
+                    }else{
+                        dashboard_server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
+                    }
+                    dashboard_server_html_block += ' ' + result["droplets"][s]['status'] + '</div>';
 
                     server_html_block += '<div class="col-sm-4">Memory</div><div class="col-sm-8">' + result["droplets"][s]['memory'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Disk</div><div class="col-sm-8">' + result["droplets"][s]['disk'] + ' GB</div>';
@@ -77,9 +88,11 @@ const update_do_droplets_info = (api_key, div_id) => {
                     server_html_block += '<div class="col-sm-4">Price monthly</div><div class="col-sm-8">$ ' + result["droplets"][s]['size']['price_monthly'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Price hourly</div><div class="col-sm-8">$ ' + result["droplets"][s]['size']['price_hourly'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Next backup window</div><div class="col-sm-8">' + result["droplets"][s]['next_backup_window'] + '</div>';
-   		    server_html_block += '</div>';
+   		            server_html_block += '</div>';
+                    dashboard_server_html_block += '</div>';
                 }
                 $("#" + div_id).html(server_html_block);
+                $("#" + dashboard_div_id).html(dashboard_server_html_block);
                 updateStatus('Loaded droplets information.');
             },
             error: function (request, status, error) {
