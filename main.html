@@ -19,6 +19,7 @@
   <body class="main-window">
     <div id="tabs">
       <ul>
+        <li><img src="images/dashboard.png" class="tabheadimg"/><a id="dashboard" href="#tab-dashboard">Dashboard</a></li>
         <li><img src="images/vultr.jpg" class="tabheadimg"/><a id="vultr" href="#tab-vultr">Vultr</a></li>
         <li><img src="images/do.jpg" class="tabheadimg"/><a id="do" href="#tab-do">Digital Ocean</a></li>
         <li><img src="images/linode.png" class="tabheadimg"/><a id="linode" href="#tab-linode">Linode</a></li>
@@ -26,6 +27,26 @@
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
 
+      <div id="tab-dashboard">
+        <div id="dashboard-div">
+          <div id="dashboard-account">
+              <div id="dashboard-account-vultr">
+              </div>
+              <div id="dashboard-account-linode">
+              </div>
+          </div>
+          <hr/>
+          <div id="dashboard-server">
+              <div id="dashboard-server-vultr">
+              </div>
+              <div id="dashboard-server-do">
+              </div>
+              <div id="dashboard-server-linode">
+              </div>
+          </div>
+        </div>
+      </div>      
+      
       <div id="tab-vultr">
         <div id="vultr-div">
           <h3>Account information <i class="fa fa-user"></i></h3>
