@@ -69,7 +69,7 @@ const update_linode_profile_info = (api_key, div_id) => {
         let options = {
             method: 'GET',
             headers: {
-              'Authorization': 'Bearer 59cd75a3013a12e795b74ee3ffc2ef535b9e7220778a2a703f8eb078f4dfc848'
+              'Authorization': 'Bearer ' + api_key
             }
         };
 
