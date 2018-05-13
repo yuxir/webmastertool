@@ -2,7 +2,8 @@
 
 const linode_api_url = 'https://api.linode.com/v4/';
 
-const update_linode_account_info = (api_key, div_id) => {
+// The mothod to update linode account information UI
+const update_linode_account_info = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
         // Load linode account information
         $.ajax({
@@ -11,7 +12,8 @@ const update_linode_account_info = (api_key, div_id) => {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
-            success: function (result) {  // update account info
+            success: function (result) {  
+                // parse result JSON
                 let address_1 = result['address_1']
                 let address_2 = result['address_2']
                 let city      = result['city']
@@ -21,14 +23,31 @@ const update_linode_account_info = (api_key, div_id) => {
                 let phone     = result['phone']
                 let email     = result['email']
 
+                // construct HTML for 'Linode' tab and the 'Dashboard'
                 let account_html_block = '<div class="row">';
+                let dashboard_account_html_block = '<div class="row">';
                 account_html_block += '<div class="col-sm-4">Address</div><div class="col-sm-8">' + address_1 + '<br/>' + address_2 + '<br/>' + city + ' ' + country + ' ' + postcode + '</div>';
                 account_html_block += '<div class="col-sm-4">Phone</div><div class="col-sm-8">'   + phone + '</div>';
                 account_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">'   + email + '</div>';
-                account_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">' + balance + '</div>';
+                account_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
+                dashboard_account_html_block += '<div class="col-sm-4">Linode Balance</div><div class="col-sm-8">';
+                if(balance<0) {
+                    account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                    dashboard_account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                }else{
+                    account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
+                    dashboard_account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
+                }
+                account_html_block += balance + '</div>';
+                dashboard_account_html_block += balance + '</div>';
                 account_html_block += '</div>';
-
+                dashboard_account_html_block += '</div>';
+                
+                // Update 'Linode' tab
                 $("#" + div_id).html(account_html_block);
+                
+                // Update Dashboard
+                $("#" + dashboard_div_id).html(dashboard_account_html_block);
                 updateStatus('Loaded account information.');
             },
             error: function (request, status, error) {
@@ -44,6 +63,7 @@ const update_linode_account_info = (api_key, div_id) => {
     }
 }
 
+// Update Linode profile UI
 const update_linode_profile_info = (api_key, div_id) => {
     if (api_key) {
         let options = {
@@ -56,6 +76,7 @@ const update_linode_profile_info = (api_key, div_id) => {
         fetch(linode_api_url + 'profile', options).then(function(response) {
           return response.json();
         }).then(function(data) {
+            // construct HTML for profile UI
             let profile_html_block = '<div class="row">';
             profile_html_block += '<div class="col-sm-4">Username</div><div class="col-sm-8">' + data['username'] + '</div>';
             profile_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">' + data['email'] + '</div>';
@@ -70,7 +91,9 @@ const update_linode_profile_info = (api_key, div_id) => {
             profile_html_block += '</div>';
             profile_html_block += '</div>';
 
+            // Update profile UI
             $("#" + div_id).html(profile_html_block);
+            // Update status bar
             updateStatus('Loaded profile information.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
@@ -82,6 +105,7 @@ const update_linode_profile_info = (api_key, div_id) => {
     }
 }
 
+// Update Linode invoices in the UI
 const update_linode_invoices_info = (api_key, div_id) => {
     if (api_key) {
         // Load linode invoices
@@ -92,6 +116,7 @@ const update_linode_invoices_info = (api_key, div_id) => {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
             success: function (result) {
+                // Construct invoice HTML
                 let invoice_html_block = '';
                 for(var s in result["data"]) {  // update instances info
 		            invoice_html_block += '<div class="row divblock">';
@@ -101,6 +126,7 @@ const update_linode_invoices_info = (api_key, div_id) => {
                     invoice_html_block += '<div class="col-sm-4">Total</div><div class="col-sm-8">' + result["data"][s]['total'] + '</div>';
    		            invoice_html_block += '</div>';
                 }
+                // Update invoice UI
                 $("#" + div_id).html(invoice_html_block);
                 updateStatus('Loaded invoices.');
             },
@@ -117,7 +143,8 @@ const update_linode_invoices_info = (api_key, div_id) => {
     }
 }
 
-const update_linode_instances_info = (api_key, div_id) => {
+// Update Linode instances information in the UI
+const update_linode_instances_info = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
         // Load linode instances
         $.ajax({
@@ -127,9 +154,12 @@ const update_linode_instances_info = (api_key, div_id) => {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
             success: function (result) {
+                // construct HTML for server information in 'Linode' tab and the dashboard
                 let server_html_block = '';
+                let dashboard_server_html_block = '';
                 for(var s in result["data"]) {  // update instances info
 		            server_html_block += '<div class="row divblock">';
+                    dashboard_server_html_block += '<div class="row">';
 		            server_html_block += '<div class="col-sm-4">Linode</div><div class="col-sm-8">' + result["data"][s]['label'] + '</div>';
                     server_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result["data"][s]['id'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Created</div><div class="col-sm-8">' + result["data"][s]['created'] + '</div>';
@@ -140,6 +170,17 @@ const update_linode_instances_info = (api_key, div_id) => {
                     }else{
                         server_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
                     }
+                    
+                    // HTML in Linode dashboard 
+                    dashboard_server_html_block += '<div class="col-sm-4">Linode server: ' + result["data"][s]['label'] + '</div>';
+                    dashboard_server_html_block += '<div class="col-sm-8">';
+					if (result["data"][s]['status'].trim()=='running') {
+                        dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
+                    }else{
+                        dashboard_server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
+                    }
+                    dashboard_server_html_block += ' ' + result["data"][s]['status'] + '</div>';
+                    
                     server_html_block += ' ' + result["data"][s]['status'].trim() + '</div>';
                     server_html_block += '<div class="col-sm-4">Region</div><div class="col-sm-8">' + result["data"][s]['region'] + '</div>';
                     server_html_block += '<div class="col-sm-4">IP</div><div class="col-sm-8">' + result["data"][s]['ipv4'] + '</div>';
@@ -148,8 +189,12 @@ const update_linode_instances_info = (api_key, div_id) => {
                     server_html_block += '<div class="col-sm-4">Disk</div><div class="col-sm-8">' + Math.round(parseFloat(result["data"][s]['specs']['disk'])/1024) + ' GB</div>';
                     server_html_block += '<div class="col-sm-4">Network</div><div class="col-sm-8">' + result["data"][s]['specs']['transfer'] + ' GB</div>';
    		            server_html_block += '</div>';
+                    dashboard_server_html_block += '</div>';
                 }
+                // Update server section UI in Linode 'tab'
                 $("#" + div_id).html(server_html_block);
+                // Update dashboard UI
+                $("#" + dashboard_div_id).html(dashboard_server_html_block);
                 updateStatus('Loaded instances.');
             },
             error: function (request, status, error) {
@@ -165,6 +210,7 @@ const update_linode_instances_info = (api_key, div_id) => {
     }
 }
 
+// Update domain information in 'Linode' tab
 const update_linode_domains_info = (api_key, div_id) => {
     if (api_key) {
         // Load linode domains
@@ -175,8 +221,9 @@ const update_linode_domains_info = (api_key, div_id) => {
                 xhr.setRequestHeader('Authorization', "Bearer " + api_key);
             },
             success: function (result) {
+                // Construct HTML for domain section in Linode tab 
                 let domain_html_block = '';
-                for(var s in result["data"]) {  // update domains info
+                for(var s in result["data"]) {  
 		            domain_html_block += '<div class="row divblock">';
 		            domain_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + result["data"][s]['domain'] + '</div>';
                     domain_html_block += '<div class="col-sm-4">Description</div><div class="col-sm-8">' + result["data"][s]['description'] + '</div>';
@@ -184,6 +231,7 @@ const update_linode_domains_info = (api_key, div_id) => {
                     domain_html_block += '<div class="col-sm-4">IPs</div><div class="col-sm-8">' + result["data"][s]['master_ips'] + '</div>';
    		            domain_html_block += '</div>';
                 }
+                // Update domain section UI 
                 $("#" + div_id).html(domain_html_block);
                 updateStatus('Loaded domains.');
             },
