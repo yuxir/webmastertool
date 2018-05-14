@@ -9,6 +9,7 @@
     <script src="js/vultr.js"></script>
     <script src="js/do.js"></script>
     <script src="js/linode.js"></script>
+    <script src="js/heroku.js"></script>
     <script src="js/webmastertool.js"></script>
 
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
@@ -23,6 +24,7 @@
         <li><img src="images/vultr.jpg" class="tabheadimg"/><a id="vultr" href="#tab-vultr">Vultr</a></li>
         <li><img src="images/do.jpg" class="tabheadimg"/><a id="do" href="#tab-do">Digital Ocean</a></li>
         <li><img src="images/linode.png" class="tabheadimg"/><a id="linode" href="#tab-linode">Linode</a></li>
+        <li><img src="images/heroku.jpg" class="tabheadimg"/><a id="heroku" href="#tab-heroku">Heroku</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
@@ -119,6 +121,22 @@
           </div>
         </div>
       </div>
+      
+      <div id="tab-heroku">
+        <div id="heroku-div">
+          <h3>Account <i class="fa fa-user"></i></h3>
+          <div id="heroku-account">
+          </div>
+
+          <h3>Applications <i class="fa fa-archive"></i></h3>
+          <div id="heroku-apps">
+          </div>
+          
+          <h3>dynos <i class="fa fa-server"></i></h3>
+          <div id="heroku-dynos">
+          </div>
+        </div>
+      </div>          
 
       <div id="tab-settings">
         <div id="settings-div">
@@ -135,7 +153,11 @@
           Linode API key: <input type="text" id="linode_api_key" size="80"/><br/>
           Get your Linode access token <a target="_blank" href="https://cloud.linode.com/profile/tokens">here</a>.<br/>
           <input type="checkbox" id="show_linode_box" name="show_linode_box"/>Show Linode tab<br/>
+          <br/>
           
+          Heroku API key: <input type="text" id="heroku_api_key" size="80"/><br/>
+          Get your Heroku API code <a target="_blank" href="https://dashboard.heroku.com/account">here</a>.<br/>
+          <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>Show Heroku tab<br/>
           <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>
