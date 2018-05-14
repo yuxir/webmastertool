@@ -84,31 +84,7 @@ const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id) => {
             updateStatus('Loaded apps info.');
             return app_ids;
         }).then(function(app_ids) {
-            for(let i in app_ids){
-                // Load Heroku dynos information
-                fetch(heroku_api_url + 'apps/' + app_ids[i] + '/dynos', options).then(function(response) {
-                    return response.json();
-                }).then(function(dynos_data) {
-                    let html_block = '';
-                    for(let s in dynos_data) {
-		                html_block += '<div class="row divblock">';
-                        html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + dynos_data[s]['name'] + '</div>';
-                        html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + dynos_data[s]['id'] + '</div>';
-                        html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + dynos_data[s]['type'] + '</div>';
-                        html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + dynos_data[s]['size'] + '</div>';
-                        html_block += '<div class="col-sm-4">State</div><div class="col-sm-8">' + dynos_data[s]['state'] + '</div>';
-                        html_block += '<div class="col-sm-4">Created at</div><div class="col-sm-8">' + dynos_data[s]['created_at'] + '</div>';
-                        html_block += '<div class="col-sm-4">Updated at</div><div class="col-sm-8">' + dynos_data[s]['updated_at'] + '</div>';
-                        html_block += '<div class="col-sm-4">App name</div><div class="col-sm-8">' + dynos_data[s]['app']['name'] + '</div>';
-                        html_block += '</div>';
-                    }
-                    $("#" + dynos_div_id).html($("#" + dynos_div_id).html()+html_block);
-                    updateStatus('Loaded dyno info.');             
-                }).catch(function(err) {
-                    let html = '<span style="color:red;">Error: ' + err + '</span>';
-                    updateStatus(html);
-                });
-            }
+            update_heroku_dynos_info(api_key, options, app_ids, dynos_div_id);
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
@@ -116,5 +92,34 @@ const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id) => {
     }else{
         let html = '<span style="color:red;">Invalid API key.</span>';
         updateStatus(html);
+    }
+}
+
+// Update Heroku dynos info
+const update_heroku_dynos_info = (api_key, options, app_ids, dynos_div_id) => {
+    for(let i in app_ids){
+    // Load Heroku dynos information
+        fetch(heroku_api_url + 'apps/' + app_ids[i] + '/dynos', options).then(function(response) {
+            return response.json();
+        }).then(function(dynos_data) {
+            let html_block = '';
+            for(let s in dynos_data) {
+                html_block += '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + dynos_data[s]['name'] + '</div>';
+                html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + dynos_data[s]['id'] + '</div>';
+                html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + dynos_data[s]['type'] + '</div>';
+                html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + dynos_data[s]['size'] + '</div>';
+                html_block += '<div class="col-sm-4">State</div><div class="col-sm-8">' + dynos_data[s]['state'] + '</div>';
+                html_block += '<div class="col-sm-4">Created at</div><div class="col-sm-8">' + dynos_data[s]['created_at'] + '</div>';
+                html_block += '<div class="col-sm-4">Updated at</div><div class="col-sm-8">' + dynos_data[s]['updated_at'] + '</div>';
+                html_block += '<div class="col-sm-4">App name</div><div class="col-sm-8">' + dynos_data[s]['app']['name'] + '</div>';
+                html_block += '</div>';
+            }
+            $("#" + dynos_div_id).html($("#" + dynos_div_id).html()+html_block);
+            updateStatus('Loaded dyno info.');             
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });
     }
 }
