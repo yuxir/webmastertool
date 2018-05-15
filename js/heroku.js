@@ -87,6 +87,49 @@ const update_heroku_invoices_info = (api_key, div_id) => {
     }
 }
 
+// Load Heroku credits information
+const update_heroku_credits_info = (api_key, div_id) => {
+    if (api_key) {
+        let options = {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + api_key,
+              'Accept': 'application/vnd.heroku+json; version=3'
+            }
+        };
+
+        fetch(heroku_api_url + 'account/credits', options).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+            let credits_html_block = '';
+
+            for(let i in data)  {          
+                credits_html_block += '<div class="row">';
+                credits_html_block += '<div class="col-sm-4">Title</div><div class="col-sm-8">' + data[i]['title'] + '</div>';
+                credits_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data[i]['id'] + '</div>';
+                credits_html_block += '<div class="col-sm-4">Amount</div><div class="col-sm-8">' + data['amount'] + '</div>';
+                credits_html_block += '<div class="col-sm-4">Balance total</div><div class="col-sm-8">' + data['balance'] + '</div>';
+                credits_html_block += '<div class="col-sm-4">Created at</div><div class="col-sm-8">' + data['created_at'] + '</div>';
+                credits_html_block += '<div class="col-sm-4">Updated at</div><div class="col-sm-8">' + data['updated_at'] + '</div>';
+   		        credits_html_block += '<div class="col-sm-4">Expired at</div><div class="col-sm-8">' + data['expires_at'] + '</div>';
+                credits_html_block += '</div>';
+            }
+                
+            // Update credits UI
+            $("#" + div_id).html(credits_html_block);
+            // Update status bar
+            updateStatus('Loaded credits info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
+
+
 // Update UI with apps and dynos info
 const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id, domains_div_id) => {
     if (api_key) {

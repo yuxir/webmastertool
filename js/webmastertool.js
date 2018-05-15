@@ -122,6 +122,7 @@ const loadSettings = () => {
               if(settings.webmastertool['show_heroku_tab']=='yes'){
                   update_heroku_account_info(settings.webmastertool['heroku_api_key'],  'heroku-account');
                   update_heroku_invoices_info(settings.webmastertool['heroku_api_key'],  'heroku-invoices');
+                  update_heroku_invoices_info(settings.webmastertool['heroku_api_key'],  'heroku-credits');
                   update_heroku_apps_info(settings.webmastertool['heroku_api_key'],  'heroku-apps', 'heroku-dynos', 'heroku-domains');
               }
             }else{
@@ -266,6 +267,7 @@ const saveSettings = () => {
                 $("div#tabs ul li:eq(4)").css("display", "block");
                 update_heroku_account_info($('input#heroku_api_key').val(),  'heroku-account');
                 update_heroku_invoices_info($('input#heroku_api_key').val(),  'heroku-invoices');
+                update_heroku_invoices_info($('input#heroku_api_key').val(),  'heroku-credits');
                 update_heroku_apps_info($('input#heroku_api_key').val(),  'heroku-apps', 'heroku-dynos', 'heroku-domains');
             }else{
                 // hide Heroku tab
