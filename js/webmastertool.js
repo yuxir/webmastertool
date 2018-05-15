@@ -121,7 +121,8 @@ const loadSettings = () => {
               // only show Heroku tab if the Heroku checkbox is ticked in settings
               if(settings.webmastertool['show_heroku_tab']=='yes'){
                   update_heroku_account_info(settings.webmastertool['heroku_api_key'],  'heroku-account');
-                  update_heroku_apps_info(settings.webmastertool['heroku_api_key'],  'heroku-apps', 'heroku-dynos');
+                  update_heroku_invoices_info(settings.webmastertool['heroku_api_key'],  'heroku-invoices');
+                  update_heroku_apps_info(settings.webmastertool['heroku_api_key'],  'heroku-apps', 'heroku-dynos', 'heroku-domains');
               }
             }else{
               // hide Heroku tab if Heroku API key is not present
@@ -264,7 +265,8 @@ const saveSettings = () => {
             if(($('#show_heroku_box:checked').length > 0)) {  
                 $("div#tabs ul li:eq(4)").css("display", "block");
                 update_heroku_account_info($('input#heroku_api_key').val(),  'heroku-account');
-                update_heroku_apps_info($('input#heroku_api_key').val(),  'heroku-apps', 'heroku-dynos');
+                update_heroku_invoices_info($('input#heroku_api_key').val(),  'heroku-invoices');
+                update_heroku_apps_info($('input#heroku_api_key').val(),  'heroku-apps', 'heroku-dynos', 'heroku-domains');
             }else{
                 // hide Heroku tab
                 $("div#tabs ul li:eq(4)").css("display", "none");
