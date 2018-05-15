@@ -43,6 +43,50 @@ const update_heroku_account_info = (api_key, div_id) => {
     }
 }
 
+// Load Heroku invoices information
+const update_heroku_invoices_info = (api_key, div_id) => {
+    if (api_key) {
+        let options = {
+            method: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + api_key,
+              'Accept': 'application/vnd.heroku+json; version=3'
+            }
+        };
+
+        fetch(heroku_api_url + 'account/invoices', options).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+            let invoices_html_block = '';
+            
+            for(let i in data)  {          
+                invoices_html_block += '<div class="row">';
+                invoices_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data[i]['id'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Number</div><div class="col-sm-8">' + data[i]['number'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Charges total</div><div class="col-sm-8">' + data['charges_total'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Credits total</div><div class="col-sm-8">' + data['credits_total'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Total</div><div class="col-sm-8">' + data['total'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Created at</div><div class="col-sm-8">' + data['created_at'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Updated at</div><div class="col-sm-8">' + data['updated_at'] + '</div>';
+   		        invoices_html_block += '<div class="col-sm-4">Period start</div><div class="col-sm-8">' + data['period_start'] + '</div>';
+                invoices_html_block += '<div class="col-sm-4">Period end</div><div class="col-sm-8">' + data['period_end'] + '</div>';
+                invoices_html_block += '</div>';
+            }
+                
+            // Update invoices UI
+            $("#" + div_id).html(invoices_html_block);
+            // Update status bar
+            updateStatus('Loaded invoices info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
+
 // Update UI with apps and dynos info
 const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id, domains_div_id) => {
     if (api_key) {
