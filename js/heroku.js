@@ -44,7 +44,7 @@ const update_heroku_account_info = (api_key, div_id) => {
 }
 
 // Update UI with apps and dynos info
-const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id) => {
+const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id, domains_div_id) => {
     if (api_key) {
         // HTTP request headers
         let options = {
@@ -85,6 +85,10 @@ const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id) => {
             return app_ids;
         }).then(function(app_ids) {
             update_heroku_dynos_info(api_key, options, app_ids, dynos_div_id);
+            return app_ids;
+        }).then(function(app_ids) {
+            update_heroku_domains_info(api_key, options, app_ids, domains_div_id);
+            return app_ids;
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
@@ -117,6 +121,33 @@ const update_heroku_dynos_info = (api_key, options, app_ids, dynos_div_id) => {
             }
             $("#" + dynos_div_id).html($("#" + dynos_div_id).html()+html_block);
             updateStatus('Loaded dyno info.');             
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });
+    }
+}
+
+// Update Heroku domains info
+const update_heroku_domains_info = (api_key, options, app_ids, domains_div_id) => {
+    for(let i in app_ids){
+        // Load Heroku domains information
+        fetch(heroku_api_url + 'apps/' + app_ids[i] + '/domains', options).then(function(response) {
+            return response.json();
+        }).then(function(domains_data) {
+            let html_block = '';
+            for(let s in domains_data) {
+                html_block += '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Hostname</div><div class="col-sm-8">' + domains_data[s]['hostname'] + '</div>';
+                html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">' + domains_data[s]['status'] + '</div>';
+                html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + domains_data[s]['id'] + '</div>';
+                html_block += '<div class="col-sm-4">Created at</div><div class="col-sm-8">' + domains_data[s]['created_at'] + '</div>';
+                html_block += '<div class="col-sm-4">CNAME</div><div class="col-sm-8">' + domains_data[s]['cname'] + '</div>';
+                html_block += '<div class="col-sm-4">App name</div><div class="col-sm-8">' + domains_data[s]['app']['name'] + '</div>';
+                html_block += '</div>';
+            }
+            $("#" + domains_div_id).html($("#" + domains_div_id).html()+html_block);
+            updateStatus('Loaded domain info.');             
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
