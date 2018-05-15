@@ -188,6 +188,7 @@ const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id, domains_div
 
 // Update Heroku dynos info
 const update_heroku_dynos_info = (api_key, options, app_ids, dynos_div_id) => {
+    $("#" + dynos_div_id).html('');
     for(let i in app_ids){
     // Load Heroku dynos information
         fetch(heroku_api_url + 'apps/' + app_ids[i] + '/dynos', options).then(function(response) {
@@ -217,6 +218,7 @@ const update_heroku_dynos_info = (api_key, options, app_ids, dynos_div_id) => {
 
 // Update Heroku domains info
 const update_heroku_domains_info = (api_key, options, app_ids, domains_div_id) => {
+    $("#" + domains_div_id).html('');
     for(let i in app_ids){
         // Load Heroku domains information
         fetch(heroku_api_url + 'apps/' + app_ids[i] + '/domains', options).then(function(response) {
