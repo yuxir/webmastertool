@@ -13,9 +13,11 @@ const update_heroku_account_info = (api_key, div_id) => {
             }
         };
 
+        // Call Heroku API to get account info
         fetch(heroku_api_url + 'account', options).then(function(response) {
           return response.json();
         }).then(function(data) {
+            // Construct HTML for account DIV in 'Heroku' tab
             let account_html_block = '';
                 
             account_html_block += '<div class="row">';
@@ -54,11 +56,13 @@ const update_heroku_invoices_info = (api_key, div_id) => {
             }
         };
 
+        // Call Heroku API to retrieve invoices info
         fetch(heroku_api_url + 'account/invoices', options).then(function(response) {
           return response.json();
         }).then(function(data) {
             let invoices_html_block = '';
             
+            // For each invoice, contruct an HTML div block
             for(let i in data)  {          
                 invoices_html_block += '<div class="row">';
                 invoices_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data[i]['id'] + '</div>';
@@ -97,12 +101,13 @@ const update_heroku_credits_info = (api_key, div_id) => {
               'Accept': 'application/vnd.heroku+json; version=3'
             }
         };
-
+        // Call Heroku API to get credits info
         fetch(heroku_api_url + 'account/credits', options).then(function(response) {
           return response.json();
         }).then(function(data) {
             let credits_html_block = '';
 
+            // Construct HTML DIVs for credits
             for(let i in data)  {          
                 credits_html_block += '<div class="row">';
                 credits_html_block += '<div class="col-sm-4">Title</div><div class="col-sm-8">' + data[i]['title'] + '</div>';
@@ -147,8 +152,9 @@ const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id, domains_div
           return response.json();
         }).then(function(data) {
             let apps_html_block = '';
-            let app_ids = [];
+            let app_ids = [];   // app_ids array is used to make the second round API calls to get dynos, domains info 
             
+            // For each application, construct HTML under applications section in 'Heroku' tab, also, keep app_ids in the array
             for(let s in data) {  
                 apps_html_block += '<div class="row divblock">';
                 
@@ -170,10 +176,10 @@ const update_heroku_apps_info = (api_key, apps_div_id, dynos_div_id, domains_div
             // Update status bar
             updateStatus('Loaded apps info.');
             return app_ids;
-        }).then(function(app_ids) {
+        }).then(function(app_ids) {  // pass app_ids to make the second API call to retrieve dynos info
             update_heroku_dynos_info(api_key, options, app_ids, dynos_div_id);
             return app_ids;
-        }).then(function(app_ids) {
+        }).then(function(app_ids) {  // pass app_ids to make the third API call to retrieve domains info
             update_heroku_domains_info(api_key, options, app_ids, domains_div_id);
             return app_ids;
         }).catch(function(err) {
@@ -193,8 +199,9 @@ const update_heroku_dynos_info = (api_key, options, app_ids, dynos_div_id) => {
     // Load Heroku dynos information
         fetch(heroku_api_url + 'apps/' + app_ids[i] + '/dynos', options).then(function(response) {
             return response.json();
-        }).then(function(dynos_data) {
+        }).then(function(dynos_data) {  
             let html_block = '';
+            // construct HTML for dynos
             for(let s in dynos_data) {
                 html_block += '<div class="row divblock">';
                 html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + dynos_data[s]['name'] + '</div>';
@@ -225,6 +232,7 @@ const update_heroku_domains_info = (api_key, options, app_ids, domains_div_id) =
             return response.json();
         }).then(function(domains_data) {
             let html_block = '';
+            // generate HTML for domains
             for(let s in domains_data) {
                 html_block += '<div class="row divblock">';
                 html_block += '<div class="col-sm-4">Hostname</div><div class="col-sm-8">' + domains_data[s]['hostname'] + '</div>';
