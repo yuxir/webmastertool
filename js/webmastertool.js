@@ -137,7 +137,7 @@ const loadSettings = () => {
         $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
         $("div#tabs ul li:eq(2)").css("display", "none");  // hide do tab
         $("div#tabs ul li:eq(3)").css("display", "none");  // hide linode tab
-        $("div#tabs ul li:eq(4)").css("display", "none");  // hide linode tab
+        $("div#tabs ul li:eq(4)").css("display", "none");  // hide heroku tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
