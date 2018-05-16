@@ -152,24 +152,46 @@
 
       <div id="tab-settings">
         <div id="settings-div">
-		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/>
-		  Get your Vultr API code <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">here</a>.<br/>
-          <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>Show Vultr tab<br/>
-		  <br/>
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/vultr.jpg" class="tabheadimg"/>Vultr API key (Get it <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="vultr_api_key" size="60"/><br/>
+                Show Vultr tab  <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>
+              </div>     
+          </div><br/>
+
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/do.jpg" class="tabheadimg"/>DO API key (Get it <a target="_blank" href="https://cloud.digitalocean.com/settings/api">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="do_api_key" size="60"/><br/>
+                Show Digital Ocean tab  <input type="checkbox" id="show_do_box" name="show_do_box"/>
+              </div>     
+          </div><br/>          
+		            
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/linode.png" class="tabheadimg"/>Linode API token (Get it <a target="_blank" href="https://cloud.linode.com/profile/tokens">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="linode_api_key" size="60"/><br/>
+                Show Linode tab  <input type="checkbox" id="show_linode_box" name="show_linode_box"/>
+              </div>     
+          </div><br/>
+
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/heroku.jpg" class="tabheadimg"/>Heroku API key (Get it <a target="_blank" href="https://dashboard.heroku.com/account">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="heroku_api_key" size="60"/><br/>
+                Show Heroku tab  <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>
+              </div>     
+          </div><br/>          
           
-          Digital Ocean API key: <input type="text" id="do_api_key" size="80"/><br/>
-          Get your DO API code <a target="_blank" href="https://cloud.digitalocean.com/settings/api">here</a>.<br/>
-          <input type="checkbox" id="show_do_box" name="show_do_box"/>Show Digital Ocean tab<br/>
-          <br/>
-          
-          Linode API key: <input type="text" id="linode_api_key" size="80"/><br/>
-          Get your Linode access token <a target="_blank" href="https://cloud.linode.com/profile/tokens">here</a>.<br/>
-          <input type="checkbox" id="show_linode_box" name="show_linode_box"/>Show Linode tab<br/>
-          <br/>
-          
-          Heroku API key: <input type="text" id="heroku_api_key" size="80"/><br/>
-          Get your Heroku API code <a target="_blank" href="https://dashboard.heroku.com/account">here</a>.<br/>
-          <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>Show Heroku tab<br/>
           <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>
@@ -178,7 +200,7 @@
       <div id="tab-about">
         <div id="about-div">
 		  <img src="icons/icon128.png"/><h4>Webmaster Tool</h4><br/>
-		  Developed by <a target="_blank" href="https://steemit.com/@yuxi">@yuxi</a><br/>
+		  Developed by <a target="_blank" href="https://github.com/yuxir">@yuxi</a><br/>
           Github: <a target="_blank" href="https://github.com/yuxir">https://github.com/yuxir</a>
 		</div>
       </div>
