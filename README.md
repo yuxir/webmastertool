@@ -22,11 +22,17 @@ Bootstrap
 
 
 **Showing Vultr information**: show users, accounts, VPS servers, backups, snapshots, DNS information.
+
 **Showing Digital Ocean information**: show DO account, droplets, snapshots, DNS information.
-**Settings**: set Vultr/DO API keys.
+
+**Showing Linode information**: show Linode account, profile, invoices, instances, and domains.
+
+**Showing Heroku information**: show Heroku account, invoices, credits, applications, dynos, and domains.
+
+**Settings**: set Vultr/DO/Linode/Heroku API keys.
 
 ## Roadmap
 
-The current version of Webmaster tool supports pulling out information via Vultr/DO API, in the following iterations, more cloud providers will be added, e.g. Linode, AWS, etc. Also, depending on the feedback, I may support some operations via cloud service provider APIs, e.g. start/stop/restart a server, create a snapshot, etc. 
+The current version of Webmaster tool supports pulling out information via Vultr/DO/Linode/Heroku API, in the following iterations, more cloud providers will be added. Also, depending on the feedback, I may support some operations via cloud service provider APIs, e.g. start/stop/restart a server, create a snapshot, etc. 
 
 
