@@ -9,6 +9,7 @@
     <script src="js/vultr.js"></script>
     <script src="js/do.js"></script>
     <script src="js/linode.js"></script>
+    <script src="js/heroku.js"></script>
     <script src="js/webmastertool.js"></script>
 
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
@@ -23,6 +24,7 @@
         <li><img src="images/vultr.jpg" class="tabheadimg"/><a id="vultr" href="#tab-vultr">Vultr</a></li>
         <li><img src="images/do.jpg" class="tabheadimg"/><a id="do" href="#tab-do">Digital Ocean</a></li>
         <li><img src="images/linode.png" class="tabheadimg"/><a id="linode" href="#tab-linode">Linode</a></li>
+        <li><img src="images/heroku.jpg" class="tabheadimg"/><a id="heroku" href="#tab-heroku">Heroku</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
@@ -30,6 +32,7 @@
       <div id="tab-dashboard">
         <div id="dashboard-div">
           <div id="dashboard-account">
+              <img src="images/account.png" class="dashboard-image"/> Account balances<br/>
               <div id="dashboard-account-vultr">
               </div>
               <div id="dashboard-account-linode">
@@ -37,6 +40,7 @@
           </div>
           <hr/>
           <div id="dashboard-server">
+              <img src="images/server.png" class="dashboard-image"/> Server<br/>
               <div id="dashboard-server-vultr">
               </div>
               <div id="dashboard-server-do">
@@ -119,22 +123,76 @@
           </div>
         </div>
       </div>
+      
+      <div id="tab-heroku">
+        <div id="heroku-div">
+          <h3>Account <i class="fa fa-user"></i></h3>
+          <div id="heroku-account">
+          </div>
+          
+          <h3>Invoices <i class="fa fa-dollar-sign"></i></h3>
+          <div id="heroku-invoices">
+          </div>
+          
+          <h3>Credits <i class="fa fa-credit-card"></i></h3>
+          <div id="heroku-credits">
+          </div>
+
+          <h3>Applications <i class="fa fa-archive"></i></h3>
+          <div id="heroku-apps">
+          </div>
+          
+          <h3>dynos <i class="fa fa-server"></i></h3>
+          <div id="heroku-dynos">
+          </div>
+          
+          <h3>domains <i class="fa fa-globe"></i></h3>
+          <div id="heroku-domains">
+          </div>
+        </div>
+      </div>          
 
       <div id="tab-settings">
         <div id="settings-div">
-		  Vultr API key: <input type="text" id="vultr_api_key" size="80"/><br/>
-		  Get your Vultr API code <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">here</a>.<br/>
-          <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>Show Vultr tab<br/>
-		  <br/>
-          
-          Digital Ocean API key: <input type="text" id="do_api_key" size="80"/><br/>
-          Get your DO API code <a target="_blank" href="https://cloud.digitalocean.com/settings/api">here</a>.<br/>
-          <input type="checkbox" id="show_do_box" name="show_do_box"/>Show Digital Ocean tab<br/>
-          <br/>
-          
-          Linode API key: <input type="text" id="linode_api_key" size="80"/><br/>
-          Get your Linode access token <a target="_blank" href="https://cloud.linode.com/profile/tokens">here</a>.<br/>
-          <input type="checkbox" id="show_linode_box" name="show_linode_box"/>Show Linode tab<br/>
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/vultr.jpg" class="tabheadimg"/>Vultr API key (Get it <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="vultr_api_key" size="60"/><br/>
+                Show Vultr tab  <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>
+              </div>     
+          </div><br/>
+
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/do.jpg" class="tabheadimg"/>DO API key (Get it <a target="_blank" href="https://cloud.digitalocean.com/settings/api">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="do_api_key" size="60"/><br/>
+                Show Digital Ocean tab  <input type="checkbox" id="show_do_box" name="show_do_box"/>
+              </div>     
+          </div><br/>          
+		            
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/linode.png" class="tabheadimg"/>Linode API token (Get it <a target="_blank" href="https://cloud.linode.com/profile/tokens">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="linode_api_key" size="60"/><br/>
+                Show Linode tab  <input type="checkbox" id="show_linode_box" name="show_linode_box"/>
+              </div>     
+          </div><br/>
+
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/heroku.jpg" class="tabheadimg"/>Heroku API key (Get it <a target="_blank" href="https://dashboard.heroku.com/account">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="text" id="heroku_api_key" size="60"/><br/>
+                Show Heroku tab  <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>
+              </div>     
+          </div><br/>          
           
           <br/>
 		  <button type="button" id="save_settings">Save</button>
@@ -144,7 +202,7 @@
       <div id="tab-about">
         <div id="about-div">
 		  <img src="icons/icon128.png"/><h4>Webmaster Tool</h4><br/>
-		  Developed by <a target="_blank" href="https://steemit.com/@yuxi">@yuxi</a><br/>
+		  Developed by <a target="_blank" href="https://github.com/yuxir">@yuxi</a><br/>
           Github: <a target="_blank" href="https://github.com/yuxir">https://github.com/yuxir</a>
 		</div>
       </div>

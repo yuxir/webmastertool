@@ -91,7 +91,7 @@ const update_vultr_server_info = (api_key, div_id, dashboard_div_id) => {
                     server_html_block += ' ' + result[s]['power_status'] + '</div>';
                     
                     // HTML in dashboard 
-                    dashboard_server_html_block += '<div class="col-sm-4">Vulr server: ' + result[s]['label'] + '</div>';
+                    dashboard_server_html_block += '<div class="col-sm-4">Vultr server: ' + result[s]['label'] + '</div>';
                     dashboard_server_html_block += '<div class="col-sm-8">';
 					if (result[s]['power_status'].trim()=='running') {
                         dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';

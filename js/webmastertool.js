@@ -48,6 +48,19 @@ const loadSettings = () => {
                 $( "#tabs" ).tabs({ active: 0 });
             }
 
+            // show/hide Heroku tab
+            if(settings.webmastertool['show_heroku_tab']=='yes'){
+                // make show Heroku tab checkboxed ticked
+                $("input#show_heroku_box").prop('checked', 'true');
+                // show Heroku tab
+                $("div#tabs ul li:eq(4)").css("display", "block");
+            }else{
+                // hide Heroku tab
+                $("div#tabs ul li:eq(4)").css("display", "none");
+                // make settings tab as default
+                $( "#tabs" ).tabs({ active: 0 });
+            }            
+            
             // Load Vultr API key to UI
             if(settings.webmastertool['vultr_api_key']) {
               $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
@@ -100,6 +113,23 @@ const loadSettings = () => {
               $("div#tabs ul li:eq(3)").css("display", "none");
               updateStatus("Empty linode API Key.");
             }
+            
+            // Load Heroku API key to UI
+            if(settings.webmastertool['heroku_api_key']) {
+              $('input#heroku_api_key').val(settings.webmastertool['heroku_api_key']);
+              
+              // only show Heroku tab if the Heroku checkbox is ticked in settings
+              if(settings.webmastertool['show_heroku_tab']=='yes'){
+                  update_heroku_account_info(settings.webmastertool['heroku_api_key'],  'heroku-account');
+                  update_heroku_invoices_info(settings.webmastertool['heroku_api_key'],  'heroku-invoices');
+                  update_heroku_invoices_info(settings.webmastertool['heroku_api_key'],  'heroku-credits');
+                  update_heroku_apps_info(settings.webmastertool['heroku_api_key'],  'heroku-apps', 'heroku-dynos', 'heroku-domains');
+              }
+            }else{
+              // hide Heroku tab if Heroku API key is not present
+              $("div#tabs ul li:eq(4)").css("display", "none");  
+              updateStatus("Empty Heroku API Key.");
+            }
 	  }else{
         // set default value for UI elements
 	    $('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
@@ -107,6 +137,7 @@ const loadSettings = () => {
         $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
         $("div#tabs ul li:eq(2)").css("display", "none");  // hide do tab
         $("div#tabs ul li:eq(3)").css("display", "none");  // hide linode tab
+        $("div#tabs ul li:eq(4)").css("display", "none");  // hide heroku tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
@@ -156,8 +187,21 @@ const saveSettings = () => {
         // save 'show linode tab' option to settings
         settings['show_linode_tab'] = 'no';
     }
+    
+    // show/hide 'Heroku' tab
+    if($('#show_heroku_box').is(":checked")) {
+        // show Heroku tab
+        $("div#tabs ul li:eq(4)").css("display", "block");
+        // save 'show Heroku tab' option to settings
+        settings['show_heroku_tab'] = 'yes';
+    }else{
+        // hide Heroku tab
+        $("div#tabs ul li:eq(4)").css("display", "none");
+        // save 'show Heroku tab' option to settings
+        settings['show_heroku_tab'] = 'no';
+    }       
 
-    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val()) {
+    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val()) {
         // If API key is valid
         if($('input#vultr_api_key').val()) {
             // Save setting
@@ -213,6 +257,23 @@ const saveSettings = () => {
                 $("div#tabs ul li:eq(3)").css("display", "none");
             }    
         }
+        
+        // If Heroku API key is valid
+        if($('input#heroku_api_key').val()) {
+            settings['heroku_api_key'] = $('input#heroku_api_key').val();
+            
+            // only update Heroku tab if show 'Heroku' checkbox is ticked
+            if(($('#show_heroku_box:checked').length > 0)) {  
+                $("div#tabs ul li:eq(4)").css("display", "block");
+                update_heroku_account_info($('input#heroku_api_key').val(),  'heroku-account');
+                update_heroku_invoices_info($('input#heroku_api_key').val(),  'heroku-invoices');
+                update_heroku_invoices_info($('input#heroku_api_key').val(),  'heroku-credits');
+                update_heroku_apps_info($('input#heroku_api_key').val(),  'heroku-apps', 'heroku-dynos', 'heroku-domains');
+            }else{
+                // hide Heroku tab
+                $("div#tabs ul li:eq(4)").css("display", "none");
+            }    
+        }        
 	}else{
         updateStatus('<span style="color:red;">Invalid API key.</span>');
     }
@@ -238,6 +299,9 @@ document.addEventListener('DOMContentLoaded', function() {
         $("#linode-div").accordion({
             heightStyle: "content"
         });
+        $("#heroku-div").accordion({
+            heightStyle: "content"
+        });        
         // Load settings to UI
         loadSettings();
     });
