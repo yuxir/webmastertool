@@ -59,6 +59,19 @@ const loadSettings = () => {
                 $("div#tabs ul li:eq(4)").css("display", "none");
                 // make settings tab as default
                 $( "#tabs" ).tabs({ active: 0 });
+            }
+
+            // show/hide Cloudflare tab
+            if(settings.webmastertool['show_cloudflare_tab']=='yes'){
+                // make show cloudflare tab checkboxed ticked
+                $("input#show_cloudflare_box").prop('checked', 'true');
+                // show cloudflare tab
+                $("div#tabs ul li:eq(5)").css("display", "block");
+            }else{
+                // hide cloudflare tab
+                $("div#tabs ul li:eq(5)").css("display", "none");
+                // make settings tab as default
+                $( "#tabs" ).tabs({ active: 0 });
             }            
             
             // Load Vultr API key to UI
@@ -130,6 +143,23 @@ const loadSettings = () => {
               $("div#tabs ul li:eq(4)").css("display", "none");  
               updateStatus("Empty Heroku API Key.");
             }
+            
+            // Load cloudflare API key to UI
+            if(settings.webmastertool['cloudflare_api_key']) {
+              $('input#cloudflare_api_key').val(settings.webmastertool['cloudflare_api_key']);
+              
+              // only show cloudflare tab if the cloudflare checkbox is ticked in settings
+              if(settings.webmastertool['show_cloudflare_tab']=='yes'){
+                  
+                  
+                  
+                  
+              }
+            }else{
+              // hide cloudflare tab if cloudflare API key is not present
+              $("div#tabs ul li:eq(5)").css("display", "none");  
+              updateStatus("Empty cloudflare API Key.");
+            }            
 	  }else{
         // set default value for UI elements
 	    $('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
@@ -138,6 +168,7 @@ const loadSettings = () => {
         $("div#tabs ul li:eq(2)").css("display", "none");  // hide do tab
         $("div#tabs ul li:eq(3)").css("display", "none");  // hide linode tab
         $("div#tabs ul li:eq(4)").css("display", "none");  // hide heroku tab
+        $("div#tabs ul li:eq(5)").css("display", "none");  // hide cloudflare tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
@@ -199,9 +230,22 @@ const saveSettings = () => {
         $("div#tabs ul li:eq(4)").css("display", "none");
         // save 'show Heroku tab' option to settings
         settings['show_heroku_tab'] = 'no';
-    }       
+    }  
 
-    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val()) {
+    // show/hide 'cloudflare' tab
+    if($('#show_cloudflare_box').is(":checked")) {
+        // show cloudflare tab
+        $("div#tabs ul li:eq(5)").css("display", "block");
+        // save 'show cloudflare tab' option to settings
+        settings['show_cloudflare_tab'] = 'yes';
+    }else{
+        // hide cloudflare tab
+        $("div#tabs ul li:eq(5)").css("display", "none");
+        // save 'show cloudflare tab' option to settings
+        settings['show_cloudflare_tab'] = 'no';
+    }      
+
+    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val()) {
         // If API key is valid
         if($('input#vultr_api_key').val()) {
             // Save setting
@@ -273,7 +317,22 @@ const saveSettings = () => {
                 // hide Heroku tab
                 $("div#tabs ul li:eq(4)").css("display", "none");
             }    
-        }        
+        }    
+
+        // If cloudflare API key is valid
+        if($('input#cloudflare_api_key').val()) {
+            settings['cloudflare_api_key'] = $('input#cloudflare_api_key').val();
+            
+            // only update cloudflare tab if show 'cloudflare' checkbox is ticked
+            if(($('#show_cloudflare_box:checked').length > 0)) {  
+                $("div#tabs ul li:eq(5)").css("display", "block");
+                
+                
+            }else{
+                // hide cloudflare tab
+                $("div#tabs ul li:eq(5)").css("display", "none");
+            }    
+        }            
 	}else{
         updateStatus('<span style="color:red;">Invalid API key.</span>');
     }
@@ -301,7 +360,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         $("#heroku-div").accordion({
             heightStyle: "content"
-        });        
+        }); 
+        $("#cloudflare-div").accordion({
+            heightStyle: "content"
+        });         
         // Load settings to UI
         loadSettings();
     });
