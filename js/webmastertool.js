@@ -146,13 +146,12 @@ const loadSettings = () => {
             
             // Load cloudflare API key to UI
             if(settings.webmastertool['cloudflare_api_key']) {
+              $('input#cloudflare_auth_email').val(settings.webmastertool['cloudflare_auth_email']);
               $('input#cloudflare_api_key').val(settings.webmastertool['cloudflare_api_key']);
               
               // only show cloudflare tab if the cloudflare checkbox is ticked in settings
               if(settings.webmastertool['show_cloudflare_tab']=='yes'){
-                  
-                  
-                  
+                  update_cloudflare_user_info(settings.webmastertool['cloudflare_auth_email'], settings.webmastertool['cloudflare_api_key'], 'cloudflare-user');
                   
               }
             }else{
@@ -321,12 +320,13 @@ const saveSettings = () => {
 
         // If cloudflare API key is valid
         if($('input#cloudflare_api_key').val()) {
+            settings['cloudflare_auth_email'] = $('input#cloudflare_auth_email').val();
             settings['cloudflare_api_key'] = $('input#cloudflare_api_key').val();
             
             // only update cloudflare tab if show 'cloudflare' checkbox is ticked
             if(($('#show_cloudflare_box:checked').length > 0)) {  
                 $("div#tabs ul li:eq(5)").css("display", "block");
-                
+                update_cloudflare_user_info($('input#cloudflare_auth_email').val(), $('input#cloudflare_api_key').val(), 'cloudflare-user');
                 
             }else{
                 // hide cloudflare tab
