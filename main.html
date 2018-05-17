@@ -10,6 +10,7 @@
     <script src="js/do.js"></script>
     <script src="js/linode.js"></script>
     <script src="js/heroku.js"></script>
+    <script src="js/cloudflare.js"></script>
     <script src="js/webmastertool.js"></script>
 
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
@@ -156,7 +157,11 @@
       <div id="tab-cloudflare">
         <div id="cloudflare-div">
           <h3>Account <i class="fa fa-user"></i></h3>
-          <div id="heroku-account">
+          <div id="heroku-account-and-user">
+            <div id="heroku-user">
+            </div> 
+            <div id="heroku-account">
+            </div>
           </div>
           
           <h3>Domains <i class="fa fa-globe"></i></h3>
@@ -209,10 +214,12 @@
           
           <div class="row">
               <div class="col-sm-4">
-                <img src="images/cloudflare.png" class="tabheadimg"/>Cloudflare API key (Get it <a target="_blank" href="https://www.cloudflare.com/a/profile">  here</a>)
+                <img src="images/cloudflare.png" class="tabheadimg"/>Cloudflare API key (Get it <a target="_blank" href="https://www.cloudflare.com/a/profile">  here</a>)<br/>
+                Cloudflare Auth Email
               </div> 
               <div class="col-sm-8">
                 <input type="password" id="cloudflare_api_key" size="60"/><br/>
+                <input type="text" id="cloudflare_auth_email" size="60"/><br/>
                 <input type="checkbox" id="show_cloudflare_box" name="show_cloudflare_box"/>
                 <label for="show_cloudflare_box">Show Cloudflare tab</label>
               </div>     
