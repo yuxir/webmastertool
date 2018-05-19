@@ -71,7 +71,15 @@ const update_cloudflare_domains_info = (auth_email, api_key, div_id) => {
               domains_html_block += '<div class="row divblock">';
               domains_html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
               domains_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data['result'][d]['id'] + '</div>';
-              domains_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">' + data['result'][d]['status'] + '</div>';
+              
+              domains_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
+              if (data['result'][d]['status'].trim()=='active') {
+                domains_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+              }else{
+                domains_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+              }
+              domains_html_block += data['result'][d]['status'] + '</div>';
+
               domains_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
               domains_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
               domains_html_block += '<div class="col-sm-4">Name servers</div><div class="col-sm-8">' + data['result'][d]['name_servers'] + '</div>';
