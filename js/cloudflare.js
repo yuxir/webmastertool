@@ -49,7 +49,7 @@ const update_cloudflare_user_info = (auth_email, api_key, div_id) => {
 }
 
 // Load cloudflare domains information
-const update_cloudflare_domains_info = (auth_email, api_key, div_id) => {
+const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns_div_id) => {
     if (api_key) {
         let options = {
             method: 'GET',
@@ -66,8 +66,10 @@ const update_cloudflare_domains_info = (auth_email, api_key, div_id) => {
         }).then(function(data) {
             // Construct HTML for domains DIV in 'cloudflare' tab
             let domains_html_block = '';
+            let zone_ids = [];   // zone_ids array is used to make the second round API calls to get DNS records
             
             for(let d in data['result']){
+              zone_ids.push(data['result'][d]['id']);    
               domains_html_block += '<div class="row divblock">';
               domains_html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
               domains_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data['result'][d]['id'] + '</div>';
@@ -91,13 +93,56 @@ const update_cloudflare_domains_info = (auth_email, api_key, div_id) => {
             }
             
             // Update domains UI
-            $("#" + div_id).html(domains_html_block);
+            $("#" + domains_div_id).html(domains_html_block);
             // Update status bar
             updateStatus('Loaded domains info.');
+            return zone_ids;
+        }).then(function(zone_ids) {  // pass zone_ids to make the second API call to retrieve DNS info
+            update_cloudflare_dns_info(auth_email, api_key, options, zone_ids, dns_div_id);
+            return zone_ids;
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
         });        
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
+
+// Load cloudflare DNS information
+const update_cloudflare_dns_info = (auth_email, api_key, options, zone_ids, dns_div_id) => {
+    if (api_key) {
+        $("#" + div_id).html('');    
+
+        for(let i in zone_ids){
+            // Call cloudflare API to get DNS info
+            fetch(cloudflare_api_url + 'zones/' + zone_ids[i] + '/dns_records', options).then(function(response) {
+              return response.json();
+            }).then(function(data) {
+                // Construct HTML for DNS DIV in 'DNS records' tab
+                let dns_html_block = '';
+            
+                for(let d in data['result']){
+                    dns_html_block += '<div class="row divblock">';
+                    dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data['result'][d]['zone_name'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data['result'][d]['type'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Record</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Content</div><div class="col-sm-8">' + data['result'][d]['content'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
+                    dns_html_block += '</div>';
+                }
+            
+                // Update DNS records section
+                $("#" + div_id).html($("#" + div_id).html()+dns_html_block);
+                // Update status bar
+                updateStatus('Loaded DNS info.');
+            }).catch(function(err) {
+                let html = '<span style="color:red;">Error: ' + err + '</span>';
+                updateStatus(html);
+            });        
+        }
     }else{
         let html = '<span style="color:red;">Invalid API key.</span>';
         updateStatus(html);
