@@ -24,7 +24,7 @@ const update_cloudflare_user_info = (auth_email, api_key, div_id) => {
             user_html_block += '<div class="row">';
             user_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data['result']['id'] + '</div>';
             user_html_block += '<div class="col-sm-4">Username</div><div class="col-sm-8">' + data['result']['username'] + '</div>';
-            user_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result']['created_on'] + '</div>';
+            user_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + $.format.date(data['result']['created_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
             user_html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + data['result']['first_name'] + ' ' + data['result']['last_name'] + '</div>';
             user_html_block += '<div class="col-sm-4">Phone</div><div class="col-sm-8">' + data['result']['telephone'] + '</div>';
             user_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">' + data['result']['email'] + '</div>';
@@ -81,9 +81,8 @@ const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns
                 domains_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
               }
               domains_html_block += data['result'][d]['status'] + '</div>';
-
-              domains_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
-              domains_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
+              domains_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + $.format.date(data['result'][d]['created_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
+              domains_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + $.format.date(data['result'][d]['modified_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
               domains_html_block += '<div class="col-sm-4">Name servers</div><div class="col-sm-8">' + data['result'][d]['name_servers'] + '</div>';
               domains_html_block += '<div class="col-sm-4">Original name servers</div><div class="col-sm-8">' + data['result'][d]['original_name_servers'] + '</div>';
               domains_html_block += '<div class="col-sm-4">Plan</div><div class="col-sm-8">' + data['result'][d]['plan']['name'] + '</div>';
@@ -131,8 +130,8 @@ const update_cloudflare_dns_info = (auth_email, api_key, options, zone_ids, dns_
                 dns_html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data['result'][d]['type'] + '</div>';
                 dns_html_block += '<div class="col-sm-4">Record</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
                 dns_html_block += '<div class="col-sm-4">Content</div><div class="col-sm-8" style="word-wrap: break-word;">' + data['result'][d]['content'] + '</div>';
-                dns_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
-                dns_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + $.format.date(data['result'][d]['created_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
+                dns_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + $.format.date(data['result'][d]['modified_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
                 dns_html_block += '</div>';
             }
             

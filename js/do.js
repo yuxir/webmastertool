@@ -123,7 +123,7 @@ const update_do_snapshots_info = (api_key, div_id) => {
 		           server_html_block += '<div class="row divblock">';
                    server_html_block += '<div class="col-sm-4">Snapshot</div><div class="col-sm-8">' + result["snapshots"][s]['name'] + '</div>';
                    server_html_block += '<div class="col-sm-4">Region</div><div class="col-sm-8">' + result["snapshots"][s]['regions'][0] + '</div>';
-                   server_html_block += '<div class="col-sm-4">Creation date</div><div class="col-sm-8">' + result["snapshots"][s]['created_at'] + '</div>';
+                   server_html_block += '<div class="col-sm-4">Creation date</div><div class="col-sm-8">' + $.format.date(result["snapshots"][s]['created_at'], "yyyy-MM-dd HH:mm:ss") + '</div>';
                    server_html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + result["snapshots"][s]['size_gigabytes'] + ' GB</div>';
                    server_html_block += '<div class="col-sm-4">Minimal disk size when restore</div><div class="col-sm-8">' + result["snapshots"][s]['min_disk_size'] + ' GB</div>';
                     
