@@ -49,7 +49,7 @@ const update_cloudflare_user_info = (auth_email, api_key, div_id) => {
 }
 
 // Load cloudflare domains information
-const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns_div_id) => {
+const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns_div_id, rules_div_id) => {
     if (api_key) {
         let options = {
             method: 'GET',
@@ -100,6 +100,9 @@ const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns
         }).then(function(zone_ids) {  // pass zone_ids to make the second API call to retrieve DNS info
             update_cloudflare_dns_info(auth_email, api_key, options, zone_ids, dns_div_id);
             return zone_ids;
+        }).then(function(zone_ids) {  // pass zone_ids to make the second API call to retrieve page rules
+            update_cloudflare_rules_info(auth_email, api_key, options, zone_ids, rules_div_id);
+            return zone_ids;
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
@@ -112,39 +115,86 @@ const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns
 
 // Load cloudflare DNS information
 const update_cloudflare_dns_info = (auth_email, api_key, options, zone_ids, dns_div_id) => {
-    if (api_key) {
-        $("#" + dns_div_id).html('');    
+    $("#" + dns_div_id).html('');    
 
-        for(let i in zone_ids){
-            // Call cloudflare API to get DNS info
-            fetch(cloudflare_api_url + 'zones/' + zone_ids[i] + '/dns_records', options).then(function(response) {
-              return response.json();
-            }).then(function(data) {
-                // Construct HTML for DNS DIV in 'DNS records' tab
-                let dns_html_block = '';
+    for(let i in zone_ids){
+        // Call cloudflare API to get DNS info
+        fetch(cloudflare_api_url + 'zones/' + zone_ids[i] + '/dns_records', options).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            // Construct HTML for DNS DIV in 'DNS records' tab
+            let dns_html_block = '';
             
-                for(let d in data['result']){
-                    dns_html_block += '<div class="row divblock">';
-                    dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data['result'][d]['zone_name'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data['result'][d]['type'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Record</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Content</div><div class="col-sm-8" style="word-wrap: break-word;">' + data['result'][d]['content'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
-                    dns_html_block += '</div>';
+            for(let d in data['result']){
+                dns_html_block += '<div class="row divblock">';
+                dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data['result'][d]['zone_name'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data['result'][d]['type'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Record</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Content</div><div class="col-sm-8" style="word-wrap: break-word;">' + data['result'][d]['content'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
+                dns_html_block += '</div>';
+            }
+            
+            // Update DNS records section
+            $("#" + dns_div_id).html($("#" + dns_div_id).html()+dns_html_block);
+            // Update status bar
+            updateStatus('Loaded DNS info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }
+}
+
+// Load cloudflare page rules
+const update_cloudflare_rules_info = (auth_email, api_key, options, zone_ids, rules_div_id) => {
+    $("#" + rules_div_id).html('');    
+
+    for(let i in zone_ids){
+        // Call cloudflare API to get page rule info
+        fetch(cloudflare_api_url + 'zones/' + zone_ids[i] + '/pagerules', options).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            // Construct HTML for DNS DIV in 'Page rules' secion under 'cloudflare' tab
+            let rules_html_block = '';
+            
+            for(let d in data['result']){
+                rules_html_block += '<div class="row divblock">';
+                
+                rules_html_block += '<div class="col-sm-4">Constraints</div><div class="col-sm-8">';
+                for(let a in data['result'][d]['targets']){
+                    rules_html_block += data['result'][d]['targets'][a]['constraint']['operator'] + ' ';
+                    rules_html_block += data['result'][d]['targets'][a]['constraint']['value'] + '<br/>';
                 }
+                rules_html_block += '</div>';
+                
+                rules_html_block += '<div class="col-sm-4">Actions</div><div class="col-sm-8">';
+                for(let a in data['result'][d]['actions']){
+                    rules_html_block += data['result'][d]['actions'][a]['id'] + '<br/>';
+                }
+                rules_html_block += '</div>';
+                
+                rules_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
+                if (data['result'][d]['status'].trim()=='active') {
+                    rules_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                }else{
+                    rules_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+                }
+                rules_html_block += data['result'][d]['status'] + '</div>';
+                
+                rules_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + $.format.date(data['result'][d]['created_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
+                rules_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + $.format.date(data['result'][d]['modified_on'], "yyyy-MM-dd HH:mm:ss") + '</div>';
+                rules_html_block += '</div>';
+            }
             
-                // Update DNS records section
-                $("#" + dns_div_id).html($("#" + dns_div_id).html()+dns_html_block);
-                // Update status bar
-                updateStatus('Loaded DNS info.');
-            }).catch(function(err) {
-                let html = '<span style="color:red;">Error: ' + err + '</span>';
-                updateStatus(html);
-            });        
-        }
-    }else{
-        let html = '<span style="color:red;">Invalid API key.</span>';
-        updateStatus(html);
+            // Update page rules section
+            $("#" + rules_div_id).html($("#" + rules_div_id).html()+rules_html_block);
+            // Update status bar
+            updateStatus('Loaded Page rules.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
     }
 }
