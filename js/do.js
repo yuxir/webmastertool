@@ -73,8 +73,8 @@ const update_do_droplets_info = (api_key, div_id, dashboard_div_id) => {
                     }
                     server_html_block += ' ' + result["droplets"][s]['status'] + '</div>';
                     
-                    dashboard_server_html_block += '<div class="col-sm-4">DO server: ' + result["droplets"][s]['name'] + '</div>';
-                    dashboard_server_html_block += '<div class="col-sm-8">';
+                    dashboard_server_html_block += '<div class="col-sm-6">DO server: ' + result["droplets"][s]['name'] + '</div>';
+                    dashboard_server_html_block += '<div class="col-sm-6">';
 					if (result["droplets"][s]['status'].trim()=='active') {
                         dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
                     }else{

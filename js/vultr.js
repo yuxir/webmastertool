@@ -22,7 +22,7 @@ const update_vultr_account_info = (api_key, div_id, dashboard_div_id) => {
                 let dashboard_account_html_block = '<div class="row">';
 
 				account_html_block           += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
-                dashboard_account_html_block += '<div class="col-sm-4">Vultr balance</div><div class="col-sm-8">';
+                dashboard_account_html_block += '<div class="col-sm-6">Vultr balance</div><div class="col-sm-6">';
 				if(Math.abs(balance)>Math.abs(pending_charges)) {
                     account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
                     dashboard_account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
@@ -91,8 +91,8 @@ const update_vultr_server_info = (api_key, div_id, dashboard_div_id) => {
                     server_html_block += ' ' + result[s]['power_status'] + '</div>';
                     
                     // HTML in dashboard 
-                    dashboard_server_html_block += '<div class="col-sm-4">Vultr server: ' + result[s]['label'] + '</div>';
-                    dashboard_server_html_block += '<div class="col-sm-8">';
+                    dashboard_server_html_block += '<div class="col-sm-6">Vultr server: ' + result[s]['label'] + '</div>';
+                    dashboard_server_html_block += '<div class="col-sm-6">';
 					if (result[s]['power_status'].trim()=='running') {
                         dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
                     }else{

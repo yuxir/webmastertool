@@ -30,7 +30,7 @@ const update_linode_account_info = (api_key, div_id, dashboard_div_id) => {
                 account_html_block += '<div class="col-sm-4">Phone</div><div class="col-sm-8">'   + phone + '</div>';
                 account_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">'   + email + '</div>';
                 account_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
-                dashboard_account_html_block += '<div class="col-sm-4">Linode Balance</div><div class="col-sm-8">';
+                dashboard_account_html_block += '<div class="col-sm-6">Linode Balance</div><div class="col-sm-6">';
                 if(balance<0) {
                     account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
                     dashboard_account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';

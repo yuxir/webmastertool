@@ -49,7 +49,7 @@ const update_cloudflare_user_info = (auth_email, api_key, div_id) => {
 }
 
 // Load cloudflare domains information
-const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns_div_id, rules_div_id) => {
+const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dashboard_div_id, dns_div_id, rules_div_id) => {
     if (api_key) {
         let options = {
             method: 'GET',
@@ -66,12 +66,24 @@ const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns
         }).then(function(data) {
             // Construct HTML for domains DIV in 'cloudflare' tab
             let domains_html_block = '';
+            let dashboard_domain_html_block = '';
             let zone_ids = [];   // zone_ids array is used to make the second round API calls to get DNS records
             
             for(let d in data['result']){
               zone_ids.push(data['result'][d]['id']);    
               domains_html_block += '<div class="row divblock">';
+              dashboard_domain_html_block += '<div class="row">';
               domains_html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
+              
+              dashboard_domain_html_block += '<div class="col-sm-6">Cloudflare domain: ' + data['result'][d]['name'] + '</div>';
+              dashboard_domain_html_block += '<div class="col-sm-6">';
+			  if (data['result'][d]['status'].trim()=='active') {
+                  dashboard_domain_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+              }else{
+                  dashboard_domain_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+              }
+              dashboard_domain_html_block += ' ' + data['result'][d]['status'].trim() + '</div>';
+              
               domains_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + data['result'][d]['id'] + '</div>';
               
               domains_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
@@ -89,10 +101,13 @@ const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns
               domains_html_block += '<div class="col-sm-4">Plan price</div><div class="col-sm-8">' + data['result'][d]['plan']['price'] +  ' ' + data['result'][d]['plan']['currency'] +'</div>';
               
               domains_html_block += '</div>';
+              dashboard_domain_html_block += '</div>';
             }
             
             // Update domains UI
             $("#" + domains_div_id).html(domains_html_block);
+            // Update dashboard
+            $("#" + dashboard_div_id).html(dashboard_domain_html_block);
             // Update status bar
             updateStatus('Loaded domains info.');
             return zone_ids;
