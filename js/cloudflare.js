@@ -113,7 +113,7 @@ const update_cloudflare_domains_info = (auth_email, api_key, domains_div_id, dns
 // Load cloudflare DNS information
 const update_cloudflare_dns_info = (auth_email, api_key, options, zone_ids, dns_div_id) => {
     if (api_key) {
-        $("#" + div_id).html('');    
+        $("#" + dns_div_id).html('');    
 
         for(let i in zone_ids){
             // Call cloudflare API to get DNS info
@@ -128,14 +128,14 @@ const update_cloudflare_dns_info = (auth_email, api_key, options, zone_ids, dns_
                     dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data['result'][d]['zone_name'] + '</div>';
                     dns_html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data['result'][d]['type'] + '</div>';
                     dns_html_block += '<div class="col-sm-4">Record</div><div class="col-sm-8">' + data['result'][d]['name'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Content</div><div class="col-sm-8">' + data['result'][d]['content'] + '</div>';
+                    dns_html_block += '<div class="col-sm-4">Content</div><div class="col-sm-8" style="word-wrap: break-word;">' + data['result'][d]['content'] + '</div>';
                     dns_html_block += '<div class="col-sm-4">Created on</div><div class="col-sm-8">' + data['result'][d]['created_on'] + '</div>';
                     dns_html_block += '<div class="col-sm-4">Modified on</div><div class="col-sm-8">' + data['result'][d]['modified_on'] + '</div>';
                     dns_html_block += '</div>';
                 }
             
                 // Update DNS records section
-                $("#" + div_id).html($("#" + div_id).html()+dns_html_block);
+                $("#" + dns_div_id).html($("#" + dns_div_id).html()+dns_html_block);
                 // Update status bar
                 updateStatus('Loaded DNS info.');
             }).catch(function(err) {
