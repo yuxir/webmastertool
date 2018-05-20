@@ -20,6 +20,11 @@
   	"icons/*",
         "webfonts/*"
   ],
+  "background": {
+    "scripts": [
+      "js/background.js"
+    ]
+  },  
   "content_scripts": [{
       "matches": ["<all_urls>"],
       "js":[
