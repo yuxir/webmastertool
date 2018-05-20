@@ -6,10 +6,13 @@
     <script src="vendor/jquery-3.2.1.min.js"></script>
     <script src="vendor/jquery-ui.min.js"></script>
     <script src="vendor/bootstrap.min.js"></script>
+    <script src="vendor/jquery-dateformat.min.js"></script>
+    
     <script src="js/vultr.js"></script>
     <script src="js/do.js"></script>
     <script src="js/linode.js"></script>
     <script src="js/heroku.js"></script>
+    <script src="js/cloudflare.js"></script>
     <script src="js/webmastertool.js"></script>
 
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
@@ -25,6 +28,7 @@
         <li><img src="images/do.jpg" class="tabheadimg"/><a id="do" href="#tab-do">Digital Ocean</a></li>
         <li><img src="images/linode.png" class="tabheadimg"/><a id="linode" href="#tab-linode">Linode</a></li>
         <li><img src="images/heroku.jpg" class="tabheadimg"/><a id="heroku" href="#tab-heroku">Heroku</a></li>
+        <li><img src="images/cloudflare.png" class="tabheadimg"/><a id="cloudflare" href="#tab-cloudflare">Cloudflare</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
@@ -48,6 +52,12 @@
               <div id="dashboard-server-linode">
               </div>
           </div>
+          <hr/>
+          <div id="dashboard-domain">
+              <img src="images/domain.jpg" class="dashboard-image"/> Domains<br/>
+              <div id="dashboard-domain-cloudflare">
+              </div>
+          </div>          
         </div>
       </div>      
       
@@ -146,11 +156,31 @@
           <div id="heroku-dynos">
           </div>
           
-          <h3>domains <i class="fa fa-globe"></i></h3>
+          <h3>Domains <i class="fa fa-globe"></i></h3>
           <div id="heroku-domains">
           </div>
         </div>
-      </div>          
+      </div> 
+
+      <div id="tab-cloudflare">
+        <div id="cloudflare-div">
+          <h3>Account <i class="fa fa-user"></i></h3>
+          <div id="cloudflare-user">
+          </div>
+          
+          <h3>Domains <i class="fa fa-globe"></i></h3>
+          <div id="cloudflare-domains">
+          </div>
+          
+          <h3>DNS records <i class="fa fa-cube"></i></h3>
+          <div id="cloudflare-dns">
+          </div>
+          
+          <h3>Page rules <i class="fa fa-thumbtack"></i></h3>
+          <div id="cloudflare-rules">
+          </div>
+        </div>
+      </div>       
 
       <div id="tab-settings">
         <div id="settings-div">
@@ -159,8 +189,9 @@
                 <img src="images/vultr.jpg" class="tabheadimg"/>Vultr API key (Get it <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">  here</a>)
               </div> 
               <div class="col-sm-8">
-                <input type="text" id="vultr_api_key" size="60"/><br/>
-                Show Vultr tab  <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>
+                <input type="password" id="vultr_api_key" size="60"/><br/>
+                <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>
+                <label for="show_vultr_box">Show Vultr tab</label>
               </div>     
           </div><br/>
 
@@ -169,8 +200,9 @@
                 <img src="images/do.jpg" class="tabheadimg"/>DO API key (Get it <a target="_blank" href="https://cloud.digitalocean.com/settings/api">  here</a>)
               </div> 
               <div class="col-sm-8">
-                <input type="text" id="do_api_key" size="60"/><br/>
-                Show Digital Ocean tab  <input type="checkbox" id="show_do_box" name="show_do_box"/>
+                <input type="password" id="do_api_key" size="60"/><br/>
+                <input type="checkbox" id="show_do_box" name="show_do_box"/>
+                <label for="show_do_box">Show Digital Ocean tab</label>
               </div>     
           </div><br/>          
 		            
@@ -179,8 +211,9 @@
                 <img src="images/linode.png" class="tabheadimg"/>Linode API token (Get it <a target="_blank" href="https://cloud.linode.com/profile/tokens">  here</a>)
               </div> 
               <div class="col-sm-8">
-                <input type="text" id="linode_api_key" size="60"/><br/>
-                Show Linode tab  <input type="checkbox" id="show_linode_box" name="show_linode_box"/>
+                <input type="password" id="linode_api_key" size="60"/><br/>
+                <input type="checkbox" id="show_linode_box" name="show_linode_box"/>
+                <label for="show_linode_box">Show Linode tab</label>
               </div>     
           </div><br/>
 
@@ -189,11 +222,24 @@
                 <img src="images/heroku.jpg" class="tabheadimg"/>Heroku API key (Get it <a target="_blank" href="https://dashboard.heroku.com/account">  here</a>)
               </div> 
               <div class="col-sm-8">
-                <input type="text" id="heroku_api_key" size="60"/><br/>
-                Show Heroku tab  <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>
+                <input type="password" id="heroku_api_key" size="60"/><br/>
+                <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>
+                <label for="show_heroku_box">Show Heroku tab</label>
               </div>     
           </div><br/>          
           
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/cloudflare.png" class="tabheadimg"/>Cloudflare API key (Get it <a target="_blank" href="https://www.cloudflare.com/a/profile">  here</a>)<br/>
+                Cloudflare Auth Email
+              </div> 
+              <div class="col-sm-8">
+                <input type="password" id="cloudflare_api_key" size="60"/><br/>
+                <input type="text" id="cloudflare_auth_email" size="60"/><br/>
+                <input type="checkbox" id="show_cloudflare_box" name="show_cloudflare_box"/>
+                <label for="show_cloudflare_box">Show Cloudflare tab</label>
+              </div>     
+          </div><br/>           
           <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>

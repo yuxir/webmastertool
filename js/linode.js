@@ -30,7 +30,7 @@ const update_linode_account_info = (api_key, div_id, dashboard_div_id) => {
                 account_html_block += '<div class="col-sm-4">Phone</div><div class="col-sm-8">'   + phone + '</div>';
                 account_html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">'   + email + '</div>';
                 account_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
-                dashboard_account_html_block += '<div class="col-sm-4">Linode Balance</div><div class="col-sm-8">';
+                dashboard_account_html_block += '<div class="col-sm-6">Linode Balance</div><div class="col-sm-6">';
                 if(balance<0) {
                     account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
                     dashboard_account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
@@ -122,7 +122,7 @@ const update_linode_invoices_info = (api_key, div_id) => {
 		            invoice_html_block += '<div class="row divblock">';
 		            invoice_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result["data"][s]['id'] + '</div>';
                     invoice_html_block += '<div class="col-sm-4">Label</div><div class="col-sm-8">' + result["data"][s]['label'] + '</div>';
-                    invoice_html_block += '<div class="col-sm-4">Date</div><div class="col-sm-8">' + result["data"][s]['date'] + '</div>';
+                    invoice_html_block += '<div class="col-sm-4">Date</div><div class="col-sm-8">' + $.format.date(result["data"][s]['date'], "yyyy-MM-dd HH:mm:ss") + '</div>';
                     invoice_html_block += '<div class="col-sm-4">Total</div><div class="col-sm-8">' + result["data"][s]['total'] + '</div>';
    		            invoice_html_block += '</div>';
                 }
@@ -162,7 +162,7 @@ const update_linode_instances_info = (api_key, div_id, dashboard_div_id) => {
                     dashboard_server_html_block += '<div class="row">';
 		            server_html_block += '<div class="col-sm-4">Linode</div><div class="col-sm-8">' + result["data"][s]['label'] + '</div>';
                     server_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result["data"][s]['id'] + '</div>';
-                    server_html_block += '<div class="col-sm-4">Created</div><div class="col-sm-8">' + result["data"][s]['created'] + '</div>';
+                    server_html_block += '<div class="col-sm-4">Created</div><div class="col-sm-8">' + $.format.date(result["data"][s]['created'], "yyyy-MM-dd HH:mm:ss") + '</div>';
                     server_html_block += '<div class="col-sm-4">Hypervisor</div><div class="col-sm-8">' + result["data"][s]['hypervisor'] + '</div>';
                     server_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
                     if (result["data"][s]['status'].trim()=='running') {
