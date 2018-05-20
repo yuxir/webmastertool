@@ -1,6 +1,6 @@
 'use strict';
 
-const api_url = 'https://api.vultr.com/';
+const vultr_api_url = 'https://api.vultr.com/v1/';
 
 const update_vultr_account_info = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
@@ -8,7 +8,7 @@ const update_vultr_account_info = (api_key, div_id, dashboard_div_id) => {
         $.ajax({
             type: "GET",
             //headers: {"API-Key": api_key},
-            url: 'https://api.vultr.com/v1/account/info',
+            url: vultr_api_url + 'account/info',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('API-Key', api_key);
             },
@@ -62,7 +62,7 @@ const update_vultr_server_info = (api_key, div_id, dashboard_div_id) => {
         // Load Vultr server information
         $.ajax({
             type: "GET",
-            url: 'https://api.vultr.com/v1/server/list',
+            url: vultr_api_url + 'server/list',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('API-Key', api_key);
             },
@@ -129,7 +129,7 @@ const update_vultr_backup_info = (api_key, div_id) => {
         // Load Vultr backup information
         $.ajax({
             type: "GET",
-            url: 'https://api.vultr.com/v1/backup/list',
+            url: vultr_api_url+'backup/list',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('API-Key', api_key);
             },
@@ -166,7 +166,7 @@ const update_vultr_snapshot_info = (api_key, div_id) => {
         // Load Vultr snapshot information
         $.ajax({
             type: "GET",
-            url: 'https://api.vultr.com/v1/snapshot/list',
+            url: vultr_api_url+'snapshot/list',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('API-Key', api_key);
             },
@@ -203,7 +203,7 @@ const update_vultr_dns_info = (api_key, div_id) => {
         // Load Vultr DNS information
         $.ajax({
             type: "GET",
-            url: 'https://api.vultr.com/v1/dns/list',
+            url: vultr_api_url+'dns/list',
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('API-Key', api_key);
             },
