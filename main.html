@@ -29,6 +29,7 @@
         <li><img src="images/linode.png" class="tabheadimg"/><a id="linode" href="#tab-linode">Linode</a></li>
         <li><img src="images/heroku.jpg" class="tabheadimg"/><a id="heroku" href="#tab-heroku">Heroku</a></li>
         <li><img src="images/cloudflare.png" class="tabheadimg"/><a id="cloudflare" href="#tab-cloudflare">Cloudflare</a></li>
+        <li><img src="images/namesilo.jpg" class="tabheadimg"/><a id="namesilo" href="#tab-namesilo">Namesilo</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
@@ -180,6 +181,22 @@
           <div id="cloudflare-rules">
           </div>
         </div>
+      </div> 
+
+      <div id="tab-namesilo">
+        <div id="namesilo-div">
+          <h3>Account <i class="fa fa-user"></i></h3>
+          <div id="namesilo-user">
+          </div>
+          
+          <h3>Domains <i class="fa fa-globe"></i></h3>
+          <div id="namesilo-domains">
+          </div>
+          
+          <h3>DNS records <i class="fa fa-cube"></i></h3>
+          <div id="namesilo-dns">
+          </div>
+        </div>
       </div>       
 
       <div id="tab-settings">
@@ -239,7 +256,18 @@
                 <input type="checkbox" id="show_cloudflare_box" name="show_cloudflare_box"/>
                 <label for="show_cloudflare_box">Show Cloudflare tab</label>
               </div>     
-          </div><br/>           
+          </div><br/>     
+
+          <div class="row">
+              <div class="col-sm-4">
+                <img src="images/namesilo.jpg" class="tabheadimg"/>Namesilo API token (Get it <a target="_blank" href="https://www.namesilo.com/account_api.php">  here</a>)
+              </div> 
+              <div class="col-sm-8">
+                <input type="password" id="namesilo_api_key" size="60"/><br/>
+                <input type="checkbox" id="show_namesilo_box"/>
+                <label for="show_namesilo_box">Show Namesilo tab</label>
+              </div>     
+          </div><br/>          
           <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>
