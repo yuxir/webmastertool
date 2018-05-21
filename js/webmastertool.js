@@ -74,6 +74,19 @@ const loadSettings = () => {
                 $( "#tabs" ).tabs({ active: 0 });
             }            
             
+            // show/hide Namesilo tab
+            if(settings.webmastertool['show_namesilo_tab']=='yes'){
+                // make show Namesilo tab checkboxed ticked
+                $("input#show_namesilo_box").prop('checked', 'true');
+                // show Namesilo tab
+                $("div#tabs ul li:eq(6)").css("display", "block");
+            }else{
+                // hide Namesilo tab
+                $("div#tabs ul li:eq(6)").css("display", "none");
+                // make settings tab as default
+                $( "#tabs" ).tabs({ active: 0 });
+            }
+            
             // Load Vultr API key to UI
             if(settings.webmastertool['vultr_api_key']) {
               $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
@@ -159,16 +172,29 @@ const loadSettings = () => {
               // hide cloudflare tab if cloudflare API key is not present
               $("div#tabs ul li:eq(5)").css("display", "none");  
               updateStatus("Empty cloudflare API Key.");
+            }     
+
+            // Load Namesilo API key to UI
+            if(settings.webmastertool['namesilo_api_key']) {
+              $('input#namesilo_api_key').val(settings.webmastertool['namesilo_api_key']);
+              
+              // only show Namesilo tab if the Namesilo checkbox is ticked in settings
+              if(settings.webmastertool['show_namesilo_tab']=='yes'){
+                  
+              }
+            }else{
+              // hide Namesilo tab if Namesilo API key is not present
+              $("div#tabs ul li:eq(6)").css("display", "none");  
+              updateStatus("Empty Namesilo API Key.");
             }            
 	  }else{
         // set default value for UI elements
-	    $('input#vultr_api_key').val('YOUR_VULTR_API_KEY');
-        $('input#do_api_key').val('YOUR_DO_API_KEY');
-        $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
+	    $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
         $("div#tabs ul li:eq(2)").css("display", "none");  // hide do tab
         $("div#tabs ul li:eq(3)").css("display", "none");  // hide linode tab
         $("div#tabs ul li:eq(4)").css("display", "none");  // hide heroku tab
         $("div#tabs ul li:eq(5)").css("display", "none");  // hide cloudflare tab
+        $("div#tabs ul li:eq(6)").css("display", "none");  // hide namesilo tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
@@ -245,7 +271,20 @@ const saveSettings = () => {
         settings['show_cloudflare_tab'] = 'no';
     }      
 
-    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val()) {
+    // show/hide 'Namesilo' tab
+    if($('#show_namesilo_box').is(":checked")) {
+        // show Namesilo tab
+        $("div#tabs ul li:eq(6)").css("display", "block");
+        // save 'show Namesilo tab' option to settings
+        settings['show_namesilo_tab'] = 'yes';
+    }else{
+        // hide Namesilo tab
+        $("div#tabs ul li:eq(6)").css("display", "none");
+        // save 'show Namesilo tab' option to settings
+        settings['show_namesilo_tab'] = 'no';
+    }    
+    
+    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val() || $('input#namesilo_api_key').val()) {
         // If API key is valid
         if($('input#vultr_api_key').val()) {
             // Save setting
@@ -333,7 +372,22 @@ const saveSettings = () => {
                 // hide cloudflare tab
                 $("div#tabs ul li:eq(5)").css("display", "none");
             }    
-        }            
+        }  
+
+        // If Namesilo API key is valid
+        if($('input#namesilo_api_key').val()) {
+            settings['namesilo_api_key'] = $('input#namesilo_api_key').val();
+            
+            // only update Namesilo tab if show 'Namesilo' checkbox is ticked
+            if(($('#show_namesilo_box:checked').length > 0)) {  
+                $("div#tabs ul li:eq(6)").css("display", "block");
+                
+                
+            }else{
+                // hide Namesilo tab
+                $("div#tabs ul li:eq(6)").css("display", "none");
+            }    
+        }         
 	}else{
         updateStatus('<span style="color:red;">Invalid API key.</span>');
     }
