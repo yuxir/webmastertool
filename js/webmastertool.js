@@ -180,7 +180,7 @@ const loadSettings = () => {
               
               // only show Namesilo tab if the Namesilo checkbox is ticked in settings
               if(settings.webmastertool['show_namesilo_tab']=='yes'){
-                  
+                update_namesilo_user_info(settings.webmastertool['namesilo_api_key'],'namesilo-user');
               }
             }else{
               // hide Namesilo tab if Namesilo API key is not present
@@ -381,8 +381,7 @@ const saveSettings = () => {
             // only update Namesilo tab if show 'Namesilo' checkbox is ticked
             if(($('#show_namesilo_box:checked').length > 0)) {  
                 $("div#tabs ul li:eq(6)").css("display", "block");
-                
-                
+                update_namesilo_user_info(settings['namesilo_api_key'], 'namesilo-user');
             }else{
                 // hide Namesilo tab
                 $("div#tabs ul li:eq(6)").css("display", "none");
@@ -417,6 +416,9 @@ document.addEventListener('DOMContentLoaded', function() {
             heightStyle: "content"
         }); 
         $("#cloudflare-div").accordion({
+            heightStyle: "content"
+        }); 
+        $("#namesilo-div").accordion({
             heightStyle: "content"
         });         
         // Load settings to UI
