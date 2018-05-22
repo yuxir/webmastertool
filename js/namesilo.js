@@ -12,7 +12,7 @@ const update_namesilo_user_info = (api_key, div_id) => {
             let xmlDoc = $.parseXML( data ); 
             let xml    = $(xmlDoc);
             
-            // Construct HTML for user DIV in 'cloudflare' tab
+            // Construct HTML for user DIV in 'namesilo' tab
             let user_html_block = '';
                 
             user_html_block += '<div class="row">';
@@ -34,6 +34,43 @@ const update_namesilo_user_info = (api_key, div_id) => {
             $("#" + div_id).html(user_html_block);
             // Update status bar
             updateStatus('Loaded user info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
+
+// Load namesilo balance
+const update_namesilo_balance = (api_key, div_id) => {
+    if (api_key) {
+        // Call namesilo API to get balance info
+        fetch(namesilo_api_url + 'getAccountBalance?version=1&type=xml&key=' + api_key).then(function(response) {
+            return response.text();            
+        }).then(function(data) {
+            let xmlDoc = $.parseXML( data ); 
+            let xml    = $(xmlDoc);
+            
+            // Construct HTML for balance DIV in 'namesilo' tab
+            let balance_html_block = '';
+                
+            balance_html_block += '<div class="row">';
+            balance_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
+            if(xml.find('balance').text()>0) {
+                balance_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+            }else{
+                balance_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i> ';
+            }
+            balance_html_block += xml.find('balance').text() + '</div>';
+            balance_html_block += '</div>';
+                
+            // Update balance UI
+            $("#" + div_id).html(balance_html_block);
+            // Update status bar
+            updateStatus('Loaded balance info.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
