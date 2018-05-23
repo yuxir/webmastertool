@@ -82,7 +82,7 @@ const update_namesilo_balance = (api_key, div_id) => {
 }
 
 // Load namesilo domains info
-const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id) => {
+const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id, forwards_div_id) => {
     if (api_key) {
         // Call namesilo API to get domains info
         fetch(namesilo_api_url + 'listDomains?version=1&type=xml&key=' + api_key).then(function(response) {
@@ -98,6 +98,7 @@ const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id) => {
         }).then(function(domains) {  // get details for each domain
             update_namesilo_domain_details(api_key, domains, domain_div_id);
             update_namesilo_dns(api_key, domains, dns_div_id);
+            update_namesilo_email_forwards(api_key, domains, forwards_div_id);
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
@@ -185,6 +186,43 @@ const update_namesilo_dns = (api_key, domains, div_id) => {
             $("#" + div_id).html($("#" + div_id).html()+html_block);
             // Update status bar
             updateStatus('Loaded Namesilo DNS info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }
+}
+
+// Load namesilo email forwards
+const update_namesilo_email_forwards = (api_key, domains, div_id) => {
+    $("#" + div_id).html('');    
+
+    for(let i in domains){
+        // Call Namesilo API to get email forwards
+        fetch(namesilo_api_url + 'listEmailForwards?version=1&type=xml&key=' + api_key+'&domain='+domains[i]).then(function(response) {
+            return response.text();
+        }).then(function(data) {
+            let xmlDoc = $.parseXML( data ); 
+            let xml    = $(xmlDoc);
+            // Construct HTML for Email forwards DIV in 'Namesilo' tab
+            let html_block = '';
+            
+            xml.find('addresses').each(function(){
+                html_block += '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8"><b>' + $(this).find('email').text() + '</b></div>';
+                html_block += '<div class="col-sm-4">Forwards to</div><div class="col-sm-8">';
+                $(this).find('forwards_to').each(function(){
+                    html_block += $(this).text() + '<br/>';
+                });
+                html_block += '</div>';
+                
+                html_block += '</div>';
+            });
+            
+            // Update Email forwards info
+            $("#" + div_id).html($("#" + div_id).html()+html_block);
+            // Update status bar
+            updateStatus('Loaded Namesilo email forwards info.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
