@@ -82,7 +82,7 @@ const update_namesilo_balance = (api_key, div_id) => {
 }
 
 // Load namesilo domains info
-const update_namesilo_domains_info = (api_key, div_id) => {
+const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id) => {
     if (api_key) {
         // Call namesilo API to get domains info
         fetch(namesilo_api_url + 'listDomains?version=1&type=xml&key=' + api_key).then(function(response) {
@@ -96,7 +96,8 @@ const update_namesilo_domains_info = (api_key, div_id) => {
             });
             return domainlist;
         }).then(function(domains) {  // get details for each domain
-            update_namesilo_domain_details(api_key, domains, div_id);
+            update_namesilo_domain_details(api_key, domains, domain_div_id);
+            update_namesilo_dns(api_key, domains, dns_div_id);
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
@@ -122,10 +123,10 @@ const update_namesilo_domain_details = (api_key, domains, div_id) => {
             let html_block = '';
             
             html_block += '<div class="row divblock">';
-            html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + domains[i] + '</div>';
+            html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8"><b>' + domains[i] + '</b></div>';
             let status = xml.find('status').text();
             html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
-            if (status.trim()=='Active') {
+            if(status.trim()=='Active') {
                 html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
             }else{
                 html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
@@ -150,6 +151,40 @@ const update_namesilo_domain_details = (api_key, domains, div_id) => {
             $("#" + div_id).html($("#" + div_id).html()+html_block);
             // Update status bar
             updateStatus('Loaded Namesilo domains info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }
+}
+
+// Load namesilo DNS records
+const update_namesilo_dns = (api_key, domains, div_id) => {
+    $("#" + div_id).html('');    
+
+    for(let i in domains){
+        // Call Namesilo API to get DNS info
+        fetch(namesilo_api_url + 'dnsListRecords?version=1&type=xml&key=' + api_key+'&domain='+domains[i]).then(function(response) {
+            return response.text();
+        }).then(function(data) {
+            let xmlDoc = $.parseXML( data ); 
+            let xml    = $(xmlDoc);
+            // Construct HTML for DNS DIV in 'Namesilo' tab
+            let html_block = '';
+            
+            xml.find('resource_record').each(function(){
+                html_block += '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8"><b>' + $(this).find('host').text() + '</b></div>';
+                html_block += '<div class="col-sm-4">Record type</div><div class="col-sm-8">' + $(this).find('type').text() + '</div>';
+                html_block += '<div class="col-sm-4">Value</div><div class="col-sm-8">' + $(this).find('value').text() + '</div>';
+                html_block += '<div class="col-sm-4">TTL</div><div class="col-sm-8">' + $(this).find('ttl').text() + '</div>';
+                html_block += '</div>';
+            });
+            
+            // Update DNS records section
+            $("#" + div_id).html($("#" + div_id).html()+html_block);
+            // Update status bar
+            updateStatus('Loaded Namesilo DNS info.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
