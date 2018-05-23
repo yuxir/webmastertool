@@ -80,3 +80,79 @@ const update_namesilo_balance = (api_key, div_id) => {
         updateStatus(html);
     }
 }
+
+// Load namesilo domains info
+const update_namesilo_domains_info = (api_key, div_id) => {
+    if (api_key) {
+        // Call namesilo API to get domains info
+        fetch(namesilo_api_url + 'listDomains?version=1&type=xml&key=' + api_key).then(function(response) {
+            return response.text();            
+        }).then(function(data) {  // parse response data to get domain list
+            let domainlist = [];
+            let xmlDoc = $.parseXML( data ); 
+            let xml    = $(xmlDoc);
+            let domains = xml.find('domain').each(function(){
+              domainlist.push($(this).text());
+            });
+            return domainlist;
+        }).then(function(domains) {  // get details for each domain
+            update_namesilo_domain_details(api_key, domains, div_id);
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
+
+// Load namesilo domain details
+const update_namesilo_domain_details = (api_key, domains, div_id) => {
+    $("#" + div_id).html('');    
+
+    for(let i in domains){
+        // Call Namesilo API to get domains info
+        fetch(namesilo_api_url + 'getDomainInfo?version=1&type=xml&key=' + api_key+'&domain='+domains[i]).then(function(response) {
+            return response.text();
+        }).then(function(data) {
+            let xmlDoc = $.parseXML( data ); 
+            let xml    = $(xmlDoc);
+            // Construct HTML for domains DIV in 'Namesilo' tab
+            let html_block = '';
+            
+            html_block += '<div class="row divblock">';
+            html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + domains[i] + '</div>';
+            let status = xml.find('status').text();
+            html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
+            if (status.trim()=='Active') {
+                html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+            }else{
+                html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+            }
+            html_block += status + '</div>';
+            html_block += '<div class="col-sm-4">Created</div><div class="col-sm-8">'      + xml.find('created').text()      + '</div>';
+            html_block += '<div class="col-sm-4">Expires</div><div class="col-sm-8">'      + xml.find('expires').text()      + '</div>';
+            html_block += '<div class="col-sm-4">Locked</div><div class="col-sm-8">'       + xml.find('locked').text()       + '</div>';
+            html_block += '<div class="col-sm-4">Auto renw</div><div class="col-sm-8">'    + xml.find('auto_renew').text()   + '</div>';
+            html_block += '<div class="col-sm-4">Traffic type</div><div class="col-sm-8">' + xml.find('traffic_type').text() + '</div>';
+            html_block += '<div class="col-sm-4">Forward URL</div><div class="col-sm-8">'  + xml.find('forward_url').text()  + '</div>';
+            html_block += '<div class="col-sm-4">Forward type</div><div class="col-sm-8">' + xml.find('forward_type').text() + '</div>';
+            html_block += '<div class="col-sm-4">Name servers</div><div class="col-sm-8">';
+            xml.find('nameserver').each(function(){
+              html_block += $(this).text() + '<br/>';
+            });
+            html_block += '</div>';
+            
+            html_block += '</div>';
+            
+            // Update DNS records section
+            $("#" + div_id).html($("#" + div_id).html()+html_block);
+            // Update status bar
+            updateStatus('Loaded Namesilo domains info.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }
+}
