@@ -7,7 +7,7 @@ const update_namesilo_user_info = (api_key, div_id) => {
     if (api_key) {
         // Call namesilo API to get user info
         fetch(namesilo_api_url + 'contactList?version=1&type=xml&key=' + api_key).then(function(response) {
-          return response.text();            
+            return response.text();            
         }).then(function(data) {
             let xmlDoc = $.parseXML( data ); 
             let xml    = $(xmlDoc);
