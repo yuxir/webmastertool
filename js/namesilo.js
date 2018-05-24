@@ -209,7 +209,7 @@ const update_namesilo_email_forwards = (api_key, domains, div_id) => {
             
             xml.find('addresses').each(function(){
                 html_block += '<div class="row divblock">';
-                html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8"><b>' + $(this).find('email').text() + '</b></div>';
+                html_block += '<div class="col-sm-4">Email</div><div class="col-sm-8">' + $(this).find('email').text() + '</div>';
                 html_block += '<div class="col-sm-4">Forwards to</div><div class="col-sm-8">';
                 $(this).find('forwards_to').each(function(){
                     html_block += $(this).text() + '<br/>';
