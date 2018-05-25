@@ -32,7 +32,9 @@
           "vendor/jquery-ui.min.js",
           "vendor/bootstrap.min.js"
       ],
-      "css": ["vendor/fontawesome-all.min.css"],
+      "css": [
+          "vendor/fontawesome-all.min.css",
+          "vendor/pretty-checkbox.min.css"],
       "run_at":"document_start"
   }],
   "permissions": [
