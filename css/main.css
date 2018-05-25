@@ -16,3 +16,7 @@
 label {
     font-weight: normal !important;
 }
+.divspace {
+    padding-top; 10px;
+    padding-bottom: 10px;
+}

@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="vendor/jquery-ui.min.css" />
     <link rel="stylesheet" type="text/css" href="vendor/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="vendor/fontawesome-all.min.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/pretty-checkbox.min.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
   </head>
   <body class="main-window">
@@ -210,73 +211,128 @@
 
       <div id="tab-settings">
         <div id="settings-div">
+          <h4>Show/Hide tabs</h4>
+          <hr/>
           <div class="row">
-              <div class="col-sm-4">
-                <img src="images/vultr.jpg" class="tabheadimg"/>Vultr API key (Get it <a target="_blank" href="https://my.vultr.com/settings/#settingsapi">  here</a>)
-              </div> 
-              <div class="col-sm-8">
-                <input type="password" id="vultr_api_key" size="60"/><br/>
-                <input type="checkbox" id="show_vultr_box" name="show_vultr_box"/>
-                <label for="show_vultr_box">Show Vultr tab</label>
-              </div>     
-          </div><br/>
+            <div class="col-sm-3">
+              <img src="images/vultr.jpg" class="tabheadimg"/>
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_vultr_box"/>
+                <div class="state p-primary">
+                  <label for="show_vultr_box">Vultr</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <img src="images/do.jpg" class="tabheadimg"/>
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_do_box"/>
+                <div class="state p-primary">
+                  <label for="show_do_box">DO</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <img src="images/linode.png" class="tabheadimg"/>
+              
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_linode_box"/>
+                <div class="state p-primary">
+                  <label for="show_linode_box">Linode</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <img src="images/heroku.jpg" class="tabheadimg"/>
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_heroku_box"/>
+                <div class="state p-primary">
+                  <label for="show_heroku_box">Heroku</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3">
+              <img src="images/cloudflare.png" class="tabheadimg"/>
+              
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_cloudflare_box"/>
+                <div class="state p-primary">
+                  <label for="show_cloudflare_box">Cloudflare</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <img src="images/namesilo.jpg" class="tabheadimg"/>
+              
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_namesilo_box"/>
+                <div class="state p-primary">
+                  <label for="show_namesilo_box">Namesilo</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+          
+          <h4>API keys</h4>
+          <hr/>
+          <div class="row divspace">
+            <div class="col-sm-4">
+              Vultr API key (<a target="_blank" href="https://my.vultr.com/settings/#settingsapi">Get it</a>)
+            </div> 
+            <div class="col-sm-8">
+              <input type="password" id="vultr_api_key" size="60"/><br/>
+            </div>  
+          </div>
 
-          <div class="row">
+          <div class="row divspace">
               <div class="col-sm-4">
-                <img src="images/do.jpg" class="tabheadimg"/>DO API key (Get it <a target="_blank" href="https://cloud.digitalocean.com/settings/api">  here</a>)
+                DO API key (<a target="_blank" href="https://cloud.digitalocean.com/settings/api">Get it</a>)
               </div> 
               <div class="col-sm-8">
                 <input type="password" id="do_api_key" size="60"/><br/>
-                <input type="checkbox" id="show_do_box" name="show_do_box"/>
-                <label for="show_do_box">Show Digital Ocean tab</label>
               </div>     
-          </div><br/>          
+          </div>          
 		            
-          <div class="row">
+          <div class="row divspace">
               <div class="col-sm-4">
-                <img src="images/linode.png" class="tabheadimg"/>Linode API token (Get it <a target="_blank" href="https://cloud.linode.com/profile/tokens">  here</a>)
+                Linode API token (<a target="_blank" href="https://cloud.linode.com/profile/tokens">Get it</a>)
               </div> 
               <div class="col-sm-8">
                 <input type="password" id="linode_api_key" size="60"/><br/>
-                <input type="checkbox" id="show_linode_box" name="show_linode_box"/>
-                <label for="show_linode_box">Show Linode tab</label>
               </div>     
-          </div><br/>
+          </div>
 
-          <div class="row">
+          <div class="row divspace">
               <div class="col-sm-4">
-                <img src="images/heroku.jpg" class="tabheadimg"/>Heroku API key (Get it <a target="_blank" href="https://dashboard.heroku.com/account">  here</a>)
+                Heroku API key (<a target="_blank" href="https://dashboard.heroku.com/account">Get it</a>)
               </div> 
               <div class="col-sm-8">
                 <input type="password" id="heroku_api_key" size="60"/><br/>
-                <input type="checkbox" id="show_heroku_box" name="show_heroku_box"/>
-                <label for="show_heroku_box">Show Heroku tab</label>
               </div>     
-          </div><br/>          
+          </div>          
           
-          <div class="row">
+          <div class="row divspace">
               <div class="col-sm-4">
-                <img src="images/cloudflare.png" class="tabheadimg"/>Cloudflare API key (Get it <a target="_blank" href="https://www.cloudflare.com/a/profile">  here</a>)<br/>
+                Cloudflare API key (<a target="_blank" href="https://www.cloudflare.com/a/profile">Get it</a>)<br/>
                 Cloudflare Auth Email
               </div> 
               <div class="col-sm-8">
                 <input type="password" id="cloudflare_api_key" size="60"/><br/>
                 <input type="text" id="cloudflare_auth_email" size="60"/><br/>
-                <input type="checkbox" id="show_cloudflare_box" name="show_cloudflare_box"/>
-                <label for="show_cloudflare_box">Show Cloudflare tab</label>
               </div>     
-          </div><br/>     
+          </div>     
 
-          <div class="row">
+          <div class="row divspace">
               <div class="col-sm-4">
-                <img src="images/namesilo.jpg" class="tabheadimg"/>Namesilo API token (Get it <a target="_blank" href="https://www.namesilo.com/account_api.php">  here</a>)
+                Namesilo API token (<a target="_blank" href="https://www.namesilo.com/account_api.php">Get it</a>)
               </div> 
               <div class="col-sm-8">
                 <input type="password" id="namesilo_api_key" size="60"/><br/>
-                <input type="checkbox" id="show_namesilo_box"/>
-                <label for="show_namesilo_box">Show Namesilo tab</label>
               </div>     
-          </div><br/>          
+          </div>         
           <br/>
 		  <button type="button" id="save_settings">Save</button>
 		</div>
