@@ -45,7 +45,7 @@ const update_namesilo_user_info = (api_key, div_id) => {
 }
 
 // Load namesilo balance
-const update_namesilo_balance = (api_key, div_id) => {
+const update_namesilo_balance = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
         // Call namesilo API to get balance info
         fetch(namesilo_api_url + 'getAccountBalance?version=1&type=xml&key=' + api_key).then(function(response) {
@@ -56,6 +56,7 @@ const update_namesilo_balance = (api_key, div_id) => {
             
             // Construct HTML for balance DIV in 'namesilo' tab
             let balance_html_block = '';
+            let balance_html_dashboard = '';
                 
             balance_html_block += '<div class="row">';
             balance_html_block += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
@@ -66,9 +67,23 @@ const update_namesilo_balance = (api_key, div_id) => {
             }
             balance_html_block += xml.find('balance').text() + '</div>';
             balance_html_block += '</div>';
+            
+            // Construct HTML for balance DIV in dashboard
+            balance_html_dashboard += '<div class="row">';
+            balance_html_dashboard += '<div class="col-sm-6">Namesilo balance</div><div class="col-sm-6">';
+            if(xml.find('balance').text()>0) {
+                balance_html_dashboard += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+            }else{
+                balance_html_dashboard += '<i class="fa fa-question" style="color:red;font-size:16px;"></i> ';
+            }
+            balance_html_dashboard += xml.find('balance').text() + '</div>';
+            balance_html_dashboard += '</div>';
                 
             // Update balance UI
             $("#" + div_id).html(balance_html_block);
+            
+            // Update balance DIV in dashboard
+            $("#" + dashboard_div_id).html(balance_html_dashboard);
             // Update status bar
             updateStatus('Loaded balance info.');
         }).catch(function(err) {
