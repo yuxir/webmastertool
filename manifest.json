@@ -3,7 +3,7 @@
   "author":     "yuxi<yuxibk@gmail.com>",
   "name":       "Webmaster Tool",
   "short_name": "Webmastertool",
-  "version":    "0.0.7",
+  "version":    "0.0.8",
   "browser_action": {
      "default_icon": "icon.png",
      "default_title": "Webmaster Tool",
@@ -32,7 +32,9 @@
           "vendor/jquery-ui.min.js",
           "vendor/bootstrap.min.js"
       ],
-      "css": ["vendor/fontawesome-all.min.css"],
+      "css": [
+          "vendor/fontawesome-all.min.css",
+          "vendor/pretty-checkbox.min.css"],
       "run_at":"document_start"
   }],
   "permissions": [

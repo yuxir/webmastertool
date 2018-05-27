@@ -52,6 +52,7 @@ const check_linode_balance = () => {
     });
 }
 
+// The onInstalled event is triggered when the extension is installed, updated, or the chrome is updated.
 chrome.runtime.onInstalled.addListener(function() {
     check_vultr_balance();
     check_linode_balance();
