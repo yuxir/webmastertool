@@ -97,7 +97,7 @@ const update_namesilo_balance = (api_key, div_id, dashboard_div_id) => {
 }
 
 // Load namesilo domains info
-const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id, forwards_div_id) => {
+const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id, forwards_div_id, dashboard_div_id) => {
     if (api_key) {
         // Call namesilo API to get domains info
         fetch(namesilo_api_url + 'listDomains?version=1&type=xml&key=' + api_key).then(function(response) {
@@ -111,7 +111,7 @@ const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id, forwar
             });
             return domainlist;
         }).then(function(domains) {  // get details for each domain
-            update_namesilo_domain_details(api_key, domains, domain_div_id);
+            update_namesilo_domain_details(api_key, domains, domain_div_id, dashboard_div_id);
             update_namesilo_dns(api_key, domains, dns_div_id);
             update_namesilo_email_forwards(api_key, domains, forwards_div_id);
         }).catch(function(err) {
@@ -125,8 +125,9 @@ const update_namesilo_domains_info = (api_key, domain_div_id, dns_div_id, forwar
 }
 
 // Load namesilo domain details
-const update_namesilo_domain_details = (api_key, domains, div_id) => {
-    $("#" + div_id).html('');    
+const update_namesilo_domain_details = (api_key, domains, div_id, dashboard_div_id) => {
+    $("#" + div_id).html(''); 
+    $("#" + dashboard_div_id).html('');     
 
     for(let i in domains){
         // Call Namesilo API to get domains info
@@ -137,8 +138,10 @@ const update_namesilo_domain_details = (api_key, domains, div_id) => {
             let xml    = $(xmlDoc);
             // Construct HTML for domains DIV in 'Namesilo' tab
             let html_block = '';
+            let dashboard_domain_html_block = '';
             
             html_block += '<div class="row divblock">';
+            dashboard_domain_html_block += '<div class="row">';
             html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8"><b>' + domains[i] + '</b></div>';
             let status = xml.find('status').text();
             html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">';
@@ -148,6 +151,15 @@ const update_namesilo_domain_details = (api_key, domains, div_id) => {
                 html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
             }
             html_block += status + '</div>';
+            
+            dashboard_domain_html_block += '<div class="col-sm-6">Namesilo domain: ' + domains[i] + '</div><div class="col-sm-6">';
+            if(status.trim()=='Active') {
+                dashboard_domain_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+            }else{
+                dashboard_domain_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+            }
+            dashboard_domain_html_block += status + '</div>';
+            
             html_block += '<div class="col-sm-4">Created</div><div class="col-sm-8">'      + xml.find('created').text()      + '</div>';
             html_block += '<div class="col-sm-4">Expires</div><div class="col-sm-8">'      + xml.find('expires').text()      + '</div>';
             html_block += '<div class="col-sm-4">Locked</div><div class="col-sm-8">'       + xml.find('locked').text()       + '</div>';
@@ -162,9 +174,12 @@ const update_namesilo_domain_details = (api_key, domains, div_id) => {
             html_block += '</div>';
             
             html_block += '</div>';
+            dashboard_domain_html_block += '</div>';
             
             // Update DNS records section
             $("#" + div_id).html($("#" + div_id).html()+html_block);
+            // Update namesilo domain info in dashboard
+            $("#" + dashboard_div_id).html($("#" + dashboard_div_id).html()+dashboard_domain_html_block);
             // Update status bar
             updateStatus('Loaded Namesilo domains info.');
         }).catch(function(err) {
@@ -172,6 +187,7 @@ const update_namesilo_domain_details = (api_key, domains, div_id) => {
             updateStatus(html);
         });        
     }
+    
 }
 
 // Load namesilo DNS records

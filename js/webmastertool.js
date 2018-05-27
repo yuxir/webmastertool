@@ -182,7 +182,7 @@ const loadSettings = () => {
               if(settings.webmastertool['show_namesilo_tab']=='yes'){
                 update_namesilo_user_info(settings.webmastertool['namesilo_api_key'],'namesilo-user');
                 update_namesilo_balance(settings.webmastertool['namesilo_api_key'],'namesilo-balance','dashboard-account-namesilo');
-                update_namesilo_domains_info(settings.webmastertool['namesilo_api_key'],'namesilo-domains','namesilo-dns','namesilo-emailforwards');
+                update_namesilo_domains_info(settings.webmastertool['namesilo_api_key'],'namesilo-domains','namesilo-dns','namesilo-emailforwards','dashboard-domain-namesilo');
               }
             }else{
               // hide Namesilo tab if Namesilo API key is not present
@@ -385,7 +385,7 @@ const saveSettings = () => {
                 $("div#tabs ul li:eq(6)").css("display", "block");
                 update_namesilo_user_info(settings['namesilo_api_key'], 'namesilo-user');
                 update_namesilo_balance(settings['namesilo_api_key'], 'namesilo-balance','dashboard-account-namesilo');
-                update_namesilo_domains_info(settings['namesilo_api_key'], 'namesilo-domains','namesilo-dns','namesilo-emailforwards');
+                update_namesilo_domains_info(settings['namesilo_api_key'], 'namesilo-domains','namesilo-dns','namesilo-emailforwards','dashboard-domain-namesilo');
             }else{
                 // hide Namesilo tab
                 $("div#tabs ul li:eq(6)").css("display", "none");
