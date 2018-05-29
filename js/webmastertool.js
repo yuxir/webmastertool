@@ -424,6 +424,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }); 
         $("#namesilo-div").accordion({
             heightStyle: "content"
+        }); 
+        $("#namecom-div").accordion({
+            heightStyle: "content"
         });         
         // Load settings to UI
         loadSettings();
