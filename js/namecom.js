@@ -3,7 +3,7 @@
 const namecom_api_url = 'https://api.name.com/v4/';
 
 // Load Name.com domain information
-const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_id) => {
+const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_id, email_forwarding_div_id) => {
     if (api_key) {
         let options = {
             method: 'GET',
@@ -28,8 +28,10 @@ const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_
             update_namecom_domains_details(options, domains, domains_div_id);
             return domains;
         }).then(function(domains) {  // pass domains to make the second API call to retrieve DNS records
-//console.log(domains);        
             update_namecom_dns_records(options, domains, dns_div_id);
+            return domains;
+        }).then(function(domains) {  // pass domains to make the second API call to retrieve DNS records
+            update_namecom_email_forwarding(options, domains, email_forwarding_div_id);
             return domains;
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
@@ -113,6 +115,37 @@ const update_namecom_dns_records = (options, domains, dns_div_id) => {
             $("#" + dns_div_id).html($("#" + dns_div_id).html()+dns_html_block);
             // Update status bar
             updateStatus('Loaded DNS records.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            console.log(html);
+            updateStatus(html);
+        });        
+    }  
+}
+
+// Load Name.com Email forwarding
+const update_namecom_email_forwarding = (options, domains, email_forwarding_div_id) => {
+    $("#" + email_forwarding_div_id).html('');    
+    for(let i in domains){
+        // Call Name.com API to get Email forwarding
+        fetch(namecom_api_url + 'domains/' + domains[i] + '/email/forwarding', options).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            // Construct HTML for Email forwarding DIV in 'Email forwarding' section
+            let html_block = '';
+                        
+            for(let j in data["emailForwarding"]) { 
+                html_block += '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data["emailForwarding"][j]['domainName'] + '</div>';
+                html_block += '<div class="col-sm-4">From</div><div class="col-sm-8">' + data["emailForwarding"][j]['emailBox'] + '</div>';
+                html_block += '<div class="col-sm-4">To</div><div class="col-sm-8">' + data["emailForwarding"][j]['emailTo'] + '</div>';
+                html_block += '</div>';
+            }            
+                        
+            // Update email forwarding section under 'Name.com' tab
+            $("#" + email_forwarding_div_id).html($("#" + email_forwarding_div_id).html()+html_block);
+            // Update status bar
+            updateStatus('Loaded email forwarding.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             console.log(html);

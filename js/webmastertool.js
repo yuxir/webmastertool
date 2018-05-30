@@ -210,7 +210,7 @@ const loadSettings = () => {
               
               // only show name.com tab if the name.com checkbox is ticked in settings
               if(settings.webmastertool['show_namecom_tab']=='yes'){
-                  update_namecom_domains_info(settings.webmastertool['namecom_username'],settings.webmastertool['namecom_api_key'],'namecom-domains', 'namecom-dns');
+                  update_namecom_domains_info(settings.webmastertool['namecom_username'],settings.webmastertool['namecom_api_key'],'namecom-domains', 'namecom-dns','namecom-emailforwards');
                   
               }
             }else{
