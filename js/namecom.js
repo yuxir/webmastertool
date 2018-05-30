@@ -3,7 +3,7 @@
 const namecom_api_url = 'https://api.name.com/v4/';
 
 // Load Name.com domain information
-const update_namecom_domains_info = (username, api_key, domains_div_id) => {
+const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_id) => {
     if (api_key) {
         let options = {
             method: 'GET',
@@ -26,6 +26,10 @@ const update_namecom_domains_info = (username, api_key, domains_div_id) => {
             return domains;            
         }).then(function(domains) {  // pass domains to make the second API call to retrieve domain details
             update_namecom_domains_details(options, domains, domains_div_id);
+            return domains;
+        }).then(function(domains) {  // pass domains to make the second API call to retrieve DNS records
+//console.log(domains);        
+            update_namecom_dns_records(options, domains, dns_div_id);
             return domains;
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
@@ -77,10 +81,42 @@ const update_namecom_domains_details = (options, domains, domains_div_id) => {
             updateStatus('Loaded domain details.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
+            console.log(err);
             updateStatus(html);
         });        
     }  
-    // Update domains UI
-    $("#" + domains_div_id).html(domains_html_block);    
 }
 
+// Load Name.com DNS records
+const update_namecom_dns_records = (options, domains, dns_div_id) => {
+    $("#" + dns_div_id).html('');    
+    for(let i in domains){
+        // Call Name.com API to get DNS records
+        fetch(namecom_api_url + 'domains/' + domains[i] + '/records', options).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            // Construct HTML for DNS DIV in 'DNS records' tab
+            let dns_html_block = '';
+                        
+            for(let j in data["records"]) { 
+                dns_html_block += '<div class="row divblock">';
+                dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data["records"][j]['domainName'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Host</div><div class="col-sm-8">' + data["records"][j]['host'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">fqdn</div><div class="col-sm-8">' + data["records"][j]['fqdn'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data["records"][j]['type'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Answer</div><div class="col-sm-8">' + data["records"][j]['answer'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">ttl</div><div class="col-sm-8">' + data["records"][j]['ttl'] + '</div>';
+                dns_html_block += '</div>';
+            }            
+                        
+            // Update domain section under 'Name.com' tab
+            $("#" + dns_div_id).html($("#" + dns_div_id).html()+dns_html_block);
+            // Update status bar
+            updateStatus('Loaded DNS records.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            console.log(html);
+            updateStatus(html);
+        });        
+    }  
+}
