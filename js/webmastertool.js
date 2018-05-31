@@ -88,7 +88,7 @@ const loadSettings = () => {
             }
             
             // show/hide Name.com tab
-            if(settings.webmastertool['show_namecom_tab']=='yes'){
+            if(settings.webmastertool['show_namecom_box']=='yes'){
                 // make show Name.com tab checkboxed ticked
                 $("input#show_namecom_box").prop('checked', 'true');
                 // show Name.com tab
@@ -209,9 +209,8 @@ const loadSettings = () => {
               $('input#namecom_api_key').val(settings.webmastertool['namecom_api_key']);
               
               // only show name.com tab if the name.com checkbox is ticked in settings
-              if(settings.webmastertool['show_namecom_tab']=='yes'){
-                  update_namecom_domains_info(settings.webmastertool['namecom_username'],settings.webmastertool['namecom_api_key'],'namecom-domains', 'namecom-dns','namecom-emailforwards');
-                  
+              if(settings.webmastertool['show_namecom_box']=='yes'){
+                  update_namecom_domains_info(settings.webmastertool['namecom_username'],settings.webmastertool['namecom_api_key'],'namecom-domains', 'namecom-dns','namecom-emailforwards','namecom-urlforwards');
               }
             }else{
               // hide namecom tab if name.com API key is not present
@@ -321,12 +320,12 @@ const saveSettings = () => {
         // show Namecom tab
         $("div#tabs ul li:eq(7)").css("display", "block");
         // save 'show Name.com tab' option to settings
-        settings['show_namecom_tab'] = 'yes';
+        settings['show_namecom_box'] = 'yes';
     }else{
         // hide Name.com tab
         $("div#tabs ul li:eq(7)").css("display", "none");
         // save 'show Name.com tab' option to settings
-        settings['show_namecom_tab'] = 'no';
+        settings['show_namecom_box'] = 'no';
     }      
     
     if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val() || $('input#namesilo_api_key').val() || $('input#namecom_api_key').val()) {
@@ -441,10 +440,9 @@ const saveSettings = () => {
             settings['namecom_username'] = $('input#namecom_username').val();
                         
             // only update Name.com tab if show 'Name.com' checkbox is ticked
-            if(($('#show_namecom_box:checked').length > 0)) {  
+            if(($('#show_namecom_box:checked').length > 0)) { 
                 $("div#tabs ul li:eq(7)").css("display", "block");
-                
-                
+                update_namecom_domains_info(settings['namecom_username'],settings['namecom_api_key'],'namecom-domains', 'namecom-dns','namecom-emailforwards','namecom-urlforwards');
             }else{
                 // hide Name.com tab
                 $("div#tabs ul li:eq(7)").css("display", "none");

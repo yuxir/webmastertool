@@ -3,7 +3,7 @@
 const namecom_api_url = 'https://api.name.com/v4/';
 
 // Load Name.com domain information
-const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_id, email_forwarding_div_id) => {
+const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_id, email_forwarding_div_id, url_forwarding_div_id) => {
     if (api_key) {
         let options = {
             method: 'GET',
@@ -30,8 +30,11 @@ const update_namecom_domains_info = (username, api_key, domains_div_id, dns_div_
         }).then(function(domains) {  // pass domains to make the second API call to retrieve DNS records
             update_namecom_dns_records(options, domains, dns_div_id);
             return domains;
-        }).then(function(domains) {  // pass domains to make the second API call to retrieve DNS records
+        }).then(function(domains) {  // pass domains to make the second API call to retrieve email forwarding info
             update_namecom_email_forwarding(options, domains, email_forwarding_div_id);
+            return domains;
+        }).then(function(domains) {  // pass domains to make the second API call to retrieve URL forwarding info
+            update_namecom_url_forwarding(options, domains, url_forwarding_div_id);
             return domains;
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
@@ -148,7 +151,39 @@ const update_namecom_email_forwarding = (options, domains, email_forwarding_div_
             updateStatus('Loaded email forwarding.');
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
-            console.log(html);
+            console.log(err);
+            updateStatus(html);
+        });        
+    }  
+}
+
+// Load Name.com URL forwarding
+const update_namecom_url_forwarding = (options, domains, url_forwarding_div_id) => {
+    $("#" + url_forwarding_div_id).html('');    
+    for(let i in domains){
+        // Call Name.com API to get URL forwarding
+        fetch(namecom_api_url + 'domains/' + domains[i] + '/url/forwarding', options).then(function(response) {
+            return response.json();
+        }).then(function(data) {
+            // Construct HTML for URL forwarding DIV in 'Url forwarding' section
+            let html_block = '';
+                        
+            for(let j in data["urlForwarding"]) { 
+                html_block += '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + data["urlForwarding"][j]['domainName'] + '</div>';
+                html_block += '<div class="col-sm-4">From</div><div class="col-sm-8">' + data["urlForwarding"][j]['host'] + '</div>';
+                html_block += '<div class="col-sm-4">To</div><div class="col-sm-8">' + data["urlForwarding"][j]['forwardsTo'] + '</div>';
+                html_block += '<div class="col-sm-4">Type</div><div class="col-sm-8">' + data["urlForwarding"][j]['type'] + '</div>';
+                html_block += '</div>';
+            }            
+                        
+            // Update URL forwarding section under 'Name.com' tab
+            $("#" + url_forwarding_div_id).html($("#" + url_forwarding_div_id).html()+html_block);
+            // Update status bar
+            updateStatus('Loaded URL forwarding.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            console.log(err);
             updateStatus(html);
         });        
     }  
