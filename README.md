@@ -29,6 +29,8 @@ Bootstrap
 
 **Showing Heroku information**: show Heroku account, invoices, credits, applications, dynos, and domains.
 
+**Supporting Cloudflare, Namesilo and Name.com**
+
 **Settings**: set Vultr/DO/Linode/Heroku API keys.
 
 ## Roadmap
