@@ -122,34 +122,32 @@ const update_vultr_server_info = (api_key, div_id, dashboard_div_id) => {
 const update_vultr_backup_info = (api_key, div_id) => {
     if (api_key) {
         // Load Vultr backup information
-        $.ajax({
-            type: "GET",
-            url: vultr_api_url+'backup/list',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('API-Key', api_key);
-            },
-            success: function (result) {
-                let backup_html_block = '';
-                for(var s in result) {
-					backup_html_block += '<div class="row divblock">';
-					backup_html_block += '<div class="col-sm-4">Description</div><div class="col-sm-8">' + result[s]['description'] + '</div>';
-                    backup_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result[s]['BACKUPID'] + '</div>';
-					backup_html_block += '<div class="col-sm-4">Date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
-					backup_html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + parseFloat(result[s]['size'])/(1024*1024*1024) + ' GB' + '</div>';
-                    backup_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">' + result[s]['status'] + '</div>';
-                    backup_html_block += '</div>';
-                }
-
-                $("#" + div_id).html(backup_html_block);
-                updateStatus('Loaded backup information.');
-            },
-            error: function (request, status, error) {
-                let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
-                updateStatus(html);
-            },
-            complete: function (data) {
+        let options = {
+            method: 'GET',
+            headers: {
+              'API-Key':   api_key
             }
-        });
+        };
+        fetch(vultr_api_url + 'backup/info', options).then(function(response) {
+            return response.json();
+        }).then(function(result) {
+            let backup_html_block = '';
+            for(var s in result) {
+                backup_html_block += '<div class="row divblock">';
+                backup_html_block += '<div class="col-sm-4">Description</div><div class="col-sm-8">' + result[s]['description'] + '</div>';
+                backup_html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + result[s]['BACKUPID'] + '</div>';
+                backup_html_block += '<div class="col-sm-4">Date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
+                backup_html_block += '<div class="col-sm-4">Size</div><div class="col-sm-8">' + parseFloat(result[s]['size'])/(1024*1024*1024) + ' GB' + '</div>';
+                backup_html_block += '<div class="col-sm-4">Status</div><div class="col-sm-8">' + result[s]['status'] + '</div>';
+                backup_html_block += '</div>';
+            }
+
+            $("#" + div_id).html(backup_html_block);
+            updateStatus('Loaded backup information.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
     }else{
         let html = '<span style="color:red;">Invalid API key.</span>';
         updateStatus(html);
