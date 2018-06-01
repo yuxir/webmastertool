@@ -4,53 +4,49 @@ const vultr_api_url = 'https://api.vultr.com/v1/';
 
 const update_vultr_account_info = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
-        // Load Vultr account information
-        $.ajax({
-            type: "GET",
-            //headers: {"API-Key": api_key},
-            url: vultr_api_url + 'account/info',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('API-Key', api_key);
-            },
-            success: function (result) {
-                let balance = result['balance'];
-                let pending_charges = result['pending_charges'];
-                let last_payment_date = result['last_payment_date'];
-                let last_payment_amount = result['last_payment_amount'];
-				
-                let account_html_block = '<div class="row">';
-                let dashboard_account_html_block = '<div class="row">';
-
-				account_html_block           += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
-                dashboard_account_html_block += '<div class="col-sm-6">Vultr balance</div><div class="col-sm-6">';
-				if(Math.abs(balance)>Math.abs(pending_charges)) {
-                    account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
-                    dashboard_account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
-                }else{
-                    account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
-                    dashboard_account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
-                }
-                account_html_block += balance + '</div>';
-                dashboard_account_html_block += balance + '</div>';
-
-                account_html_block += '<div class="col-sm-4">Pending charges</div><div class="col-sm-8">' + pending_charges + '</div>';
-                account_html_block += '<div class="col-sm-4">Last payment date</div><div class="col-sm-8">' + last_payment_date + '</div>';
-                account_html_block += '<div class="col-sm-4">Last payment amount</div><div class="col-sm-8">' + last_payment_amount + '</div>';
-				account_html_block += '</div>';
-                
-                dashboard_account_html_block += '</div>';
-				
-                $("#" + div_id).html(account_html_block);
-                $("#" + dashboard_div_id).html(dashboard_account_html_block);
-                updateStatus('Loaded account information.');
-            },
-            error: function (request, status, error) {
-                let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
-                updateStatus(html);
-            },
-            complete: function (data) {
+        let options = {
+            method: 'GET',
+            headers: {
+              'API-Key':   api_key
             }
-        });
+        };
+        fetch(vultr_api_url + 'account/info', options).then(function(response) {
+            return response.json();
+        }).then(function(result) {
+            let balance = result['balance'];
+            let pending_charges = result['pending_charges'];
+            let last_payment_date = result['last_payment_date'];
+            let last_payment_amount = result['last_payment_amount'];
+				
+            let account_html_block = '<div class="row">';
+            let dashboard_account_html_block = '<div class="row">';
+
+			account_html_block           += '<div class="col-sm-4">Balance</div><div class="col-sm-8">';
+            dashboard_account_html_block += '<div class="col-sm-6">Vultr balance</div><div class="col-sm-6">';
+			if(Math.abs(balance)>Math.abs(pending_charges)) {
+                account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                dashboard_account_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+            }else{
+                account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
+                dashboard_account_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>Insufficient balance! ';
+            }
+            account_html_block += balance + '</div>';
+            dashboard_account_html_block += balance + '</div>';
+
+            account_html_block += '<div class="col-sm-4">Pending charges</div><div class="col-sm-8">' + pending_charges + '</div>';
+            account_html_block += '<div class="col-sm-4">Last payment date</div><div class="col-sm-8">' + last_payment_date + '</div>';
+            account_html_block += '<div class="col-sm-4">Last payment amount</div><div class="col-sm-8">' + last_payment_amount + '</div>';
+			account_html_block += '</div>';
+                
+            dashboard_account_html_block += '</div>';
+				
+            $("#" + div_id).html(account_html_block);
+            $("#" + dashboard_div_id).html(dashboard_account_html_block);
+            updateStatus('Loaded account information.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });           
     }else{
         let html = '<span style="color:red;">Invalid API key.</span>';
         updateStatus(html);
