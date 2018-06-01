@@ -55,65 +55,64 @@ const update_vultr_account_info = (api_key, div_id, dashboard_div_id) => {
 
 const update_vultr_server_info = (api_key, div_id, dashboard_div_id) => {
     if (api_key) {
-        // Load Vultr server information
-        $.ajax({
-            type: "GET",
-            url: vultr_api_url + 'server/list',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('API-Key', api_key);
-            },
-            success: function (result) {
-                let server_html_block = '';
-                let dashboard_server_html_block = '';
-                for(var s in result) {
-					server_html_block += '<div class="row divblock">';
-                    dashboard_server_html_block += '<div class="row">';
-					server_html_block += '<div class="col-sm-4">Server</div><div class="col-sm-8">' + result[s]['label'] + '</div>';
-
-                    server_html_block += '<div class="col-sm-4">State</div><div class="col-sm-8">';
-                    if (result[s]['server_state'].trim()=='ok') {
-                        server_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
-                    }else{
-                        server_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
-                    }
-                    server_html_block += ' ' + result[s]['server_state'] + '</div>';
-
-                    server_html_block += '<div class="col-sm-4">Power status</div><div class="col-sm-8">';
-					if (result[s]['power_status'].trim()=='running') {
-                        server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
-                    }else{
-                        server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
-                    }
-                    server_html_block += ' ' + result[s]['power_status'] + '</div>';
-                    
-                    // HTML in dashboard 
-                    dashboard_server_html_block += '<div class="col-sm-6">Vultr server: ' + result[s]['label'] + '</div>';
-                    dashboard_server_html_block += '<div class="col-sm-6">';
-					if (result[s]['power_status'].trim()=='running') {
-                        dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
-                    }else{
-                        dashboard_server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
-                    }
-                    dashboard_server_html_block += ' ' + result[s]['power_status'] + '</div>';
-
-					server_html_block += '<div class="col-sm-4">Location</div><div class="col-sm-8">' + result[s]['location'] + '</div>';
-                    server_html_block += '<div class="col-sm-4">IP</div><div class="col-sm-8">' + result[s]['main_ip'] + '</div>';
-                    server_html_block += '<div class="col-sm-4">Ram</div><div class="col-sm-8">' + result[s]['ram'] + '</div>';
-                    server_html_block += '<div class="col-sm-4">Disk</div><div class="col-sm-8">' + result[s]['disk'] + '</div>';
-					server_html_block += '</div>';
-                    dashboard_server_html_block += '</div>';
-                }
-                $("#" + div_id).html(server_html_block);
-                $("#" + dashboard_div_id).html(dashboard_server_html_block);
-                updateStatus('Loaded server information.');
-            },
-            error: function (request, status, error) {
-                let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
-                updateStatus(html);
-            },
-            complete: function (data) {
+        let options = {
+            method: 'GET',
+            headers: {
+              'API-Key':   api_key
             }
-        });
+        };
+        
+        // get Vultr server info
+        fetch(vultr_api_url + 'server/list', options).then(function(response) {
+            return response.json();
+        }).then(function(result) {
+            let server_html_block = '';
+            let dashboard_server_html_block = '';
+            for(var s in result) {
+                server_html_block += '<div class="row divblock">';
+                dashboard_server_html_block += '<div class="row">';
+                server_html_block += '<div class="col-sm-4">Server</div><div class="col-sm-8">' + result[s]['label'] + '</div>';
+
+                server_html_block += '<div class="col-sm-4">State</div><div class="col-sm-8">';
+                if (result[s]['server_state'].trim()=='ok') {
+                    server_html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                }else{
+                    server_html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+                }
+                server_html_block += ' ' + result[s]['server_state'] + '</div>';
+
+                server_html_block += '<div class="col-sm-4">Power status</div><div class="col-sm-8">';
+				if (result[s]['power_status'].trim()=='running') {
+                    server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
+                }else{
+                    server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
+                }
+                server_html_block += ' ' + result[s]['power_status'] + '</div>';
+                    
+                // HTML in dashboard 
+                dashboard_server_html_block += '<div class="col-sm-6">Vultr server: ' + result[s]['label'] + '</div>';
+                dashboard_server_html_block += '<div class="col-sm-6">';
+				if (result[s]['power_status'].trim()=='running') {
+                    dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
+                }else{
+                    dashboard_server_html_block += '<i class="fa fa-power-off" style="color:lightgrey;font-size:16px;"></i>';
+                }
+                dashboard_server_html_block += ' ' + result[s]['power_status'] + '</div>';
+
+                server_html_block += '<div class="col-sm-4">Location</div><div class="col-sm-8">' + result[s]['location'] + '</div>';
+                server_html_block += '<div class="col-sm-4">IP</div><div class="col-sm-8">' + result[s]['main_ip'] + '</div>';
+                server_html_block += '<div class="col-sm-4">Ram</div><div class="col-sm-8">' + result[s]['ram'] + '</div>';
+                server_html_block += '<div class="col-sm-4">Disk</div><div class="col-sm-8">' + result[s]['disk'] + '</div>';
+                server_html_block += '</div>';
+                dashboard_server_html_block += '</div>';
+            }
+            $("#" + div_id).html(server_html_block);
+            $("#" + dashboard_div_id).html(dashboard_server_html_block);
+            updateStatus('Loaded server information.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });           
     }else{
         let html = '<span style="color:red;">Invalid API key.</span>';
         updateStatus(html);
