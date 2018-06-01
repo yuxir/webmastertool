@@ -192,31 +192,29 @@ const update_vultr_snapshot_info = (api_key, div_id) => {
 const update_vultr_dns_info = (api_key, div_id) => {
     if (api_key) {
         // Load Vultr DNS information
-        $.ajax({
-            type: "GET",
-            url: vultr_api_url+'dns/list',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('API-Key', api_key);
-            },
-            success: function (result) {
-                let dns_html_block = '';
-                for(var s in result) {
-					dns_html_block += '<div class="row divblock">';
-					dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + result[s]['domain'] + '</div>';
-                    dns_html_block += '<div class="col-sm-4">Creation date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
-                    dns_html_block += '</div>';
-                }
-
-                $("#" + div_id).html(dns_html_block);
-                updateStatus('Loaded DNS information.');
-            },
-            error: function (request, status, error) {
-                let html = '<span style="color:red;">Error: ' + request.responseText + '</span>';
-                updateStatus(html);
-            },
-            complete: function (data) {
+        let options = {
+            method: 'GET',
+            headers: {
+              'API-Key':   api_key
             }
-        });
+        };
+        fetch(vultr_api_url + 'dns/list', options).then(function(response) {
+            return response.json();
+        }).then(function(result) {
+            let dns_html_block = '';
+            for(var s in result) {
+                dns_html_block += '<div class="row divblock">';
+                dns_html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8">' + result[s]['domain'] + '</div>';
+                dns_html_block += '<div class="col-sm-4">Creation date</div><div class="col-sm-8">' + result[s]['date_created'] + '</div>';
+                dns_html_block += '</div>';
+            }
+
+            $("#" + div_id).html(dns_html_block);
+            updateStatus('Loaded DNS information.');
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });         
     }else{
         let html = '<span style="color:red;">Invalid API key.</span>';
         updateStatus(html);
