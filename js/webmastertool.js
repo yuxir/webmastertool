@@ -87,6 +87,19 @@ const loadSettings = () => {
                 $( "#tabs" ).tabs({ active: 0 });
             }
             
+            // show/hide Name.com tab
+            if(settings.webmastertool['show_namecom_box']=='yes'){
+                // make show Name.com tab checkboxed ticked
+                $("input#show_namecom_box").prop('checked', 'true');
+                // show Name.com tab
+                $("div#tabs ul li:eq(7)").css("display", "block");
+            }else{
+                // hide Name.com tab
+                $("div#tabs ul li:eq(7)").css("display", "none");
+                // make settings tab as default
+                $( "#tabs" ).tabs({ active: 0 });
+            }
+            
             // Load Vultr API key to UI
             if(settings.webmastertool['vultr_api_key']) {
               $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
@@ -188,7 +201,22 @@ const loadSettings = () => {
               // hide Namesilo tab if Namesilo API key is not present
               $("div#tabs ul li:eq(6)").css("display", "none");  
               updateStatus("Empty Namesilo API Key.");
-            }            
+            }  
+
+            // Load Name.com API key to UI
+            if(settings.webmastertool['namecom_api_key']) {
+              $('input#namecom_username').val(settings.webmastertool['namecom_username']);
+              $('input#namecom_api_key').val(settings.webmastertool['namecom_api_key']);
+              
+              // only show name.com tab if the name.com checkbox is ticked in settings
+              if(settings.webmastertool['show_namecom_box']=='yes'){
+                  update_namecom_domains_info(settings.webmastertool['namecom_username'],settings.webmastertool['namecom_api_key'],'namecom-domains', 'namecom-dns','namecom-emailforwards','namecom-urlforwards');
+              }
+            }else{
+              // hide namecom tab if name.com API key is not present
+              $("div#tabs ul li:eq(7)").css("display", "none");  
+              updateStatus("Empty name.com API Key.");
+            }             
 	  }else{
         // set default value for UI elements
 	    $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
@@ -197,6 +225,7 @@ const loadSettings = () => {
         $("div#tabs ul li:eq(4)").css("display", "none");  // hide heroku tab
         $("div#tabs ul li:eq(5)").css("display", "none");  // hide cloudflare tab
         $("div#tabs ul li:eq(6)").css("display", "none");  // hide namesilo tab
+        $("div#tabs ul li:eq(7)").css("display", "none");  // hide namecom tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
@@ -284,9 +313,22 @@ const saveSettings = () => {
         $("div#tabs ul li:eq(6)").css("display", "none");
         // save 'show Namesilo tab' option to settings
         settings['show_namesilo_tab'] = 'no';
-    }    
+    }  
+
+    // show/hide 'Name.com' tab
+    if($('#show_namecom_box').is(":checked")) {
+        // show Namecom tab
+        $("div#tabs ul li:eq(7)").css("display", "block");
+        // save 'show Name.com tab' option to settings
+        settings['show_namecom_box'] = 'yes';
+    }else{
+        // hide Name.com tab
+        $("div#tabs ul li:eq(7)").css("display", "none");
+        // save 'show Name.com tab' option to settings
+        settings['show_namecom_box'] = 'no';
+    }      
     
-    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val() || $('input#namesilo_api_key').val()) {
+    if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val() || $('input#namesilo_api_key').val() || $('input#namecom_api_key').val()) {
         // If API key is valid
         if($('input#vultr_api_key').val()) {
             // Save setting
@@ -390,7 +432,22 @@ const saveSettings = () => {
                 // hide Namesilo tab
                 $("div#tabs ul li:eq(6)").css("display", "none");
             }    
-        }         
+        }   
+
+        // If Name.com API key is valid
+        if($('input#namecom_api_key').val()) {
+            settings['namecom_api_key'] = $('input#namecom_api_key').val();
+            settings['namecom_username'] = $('input#namecom_username').val();
+                        
+            // only update Name.com tab if show 'Name.com' checkbox is ticked
+            if(($('#show_namecom_box:checked').length > 0)) { 
+                $("div#tabs ul li:eq(7)").css("display", "block");
+                update_namecom_domains_info(settings['namecom_username'],settings['namecom_api_key'],'namecom-domains', 'namecom-dns','namecom-emailforwards','namecom-urlforwards');
+            }else{
+                // hide Name.com tab
+                $("div#tabs ul li:eq(7)").css("display", "none");
+            }    
+        }           
 	}else{
         updateStatus('<span style="color:red;">Invalid API key.</span>');
     }
@@ -423,6 +480,9 @@ document.addEventListener('DOMContentLoaded', function() {
             heightStyle: "content"
         }); 
         $("#namesilo-div").accordion({
+            heightStyle: "content"
+        }); 
+        $("#namecom-div").accordion({
             heightStyle: "content"
         });         
         // Load settings to UI
