@@ -100,6 +100,19 @@ const loadSettings = () => {
                 $( "#tabs" ).tabs({ active: 0 });
             }
             
+            // show/hide Namecheap tab
+            if(settings.webmastertool['show_namecheap_box']=='yes'){
+                // make show namecheap tab checkboxed ticked
+                $("input#show_namecheap_box").prop('checked', 'true');
+                // show namecheap tab
+                $("div#tabs ul li:eq(8)").css("display", "block");
+            }else{
+                // hide namecheap tab
+                $("div#tabs ul li:eq(8)").css("display", "none");
+                // make settings tab as default
+                $( "#tabs" ).tabs({ active: 0 });
+            }            
+            
             // Load Vultr API key to UI
             if(settings.webmastertool['vultr_api_key']) {
               $('input#vultr_api_key').val(settings.webmastertool['vultr_api_key']);
@@ -216,7 +229,22 @@ const loadSettings = () => {
               // hide namecom tab if name.com API key is not present
               $("div#tabs ul li:eq(7)").css("display", "none");  
               updateStatus("Empty name.com API Key.");
-            }             
+            }  
+
+            // Load Namecheap API key to UI
+            if(settings.webmastertool['namecheap_api_key']) {
+              $('input#namecheap_username').val(settings.webmastertool['namecheap_username']);
+              $('input#namecheap_api_key').val(settings.webmastertool['namecheap_api_key']);
+              
+              // only show namecheap tab if the namecheap checkbox is ticked in settings
+              if(settings.webmastertool['show_namecheap_box']=='yes'){
+                  //update_namecheap_domains_info(settings.webmastertool['namecheap_username'],settings.webmastertool['namecheap_api_key'],'namecheap-domains', 'namecheap-dns','namecheap-emailforwards','namecheap-urlforwards');
+              }
+            }else{
+              // hide namecheap tab if namecheap API key is not present
+              $("div#tabs ul li:eq(8)").css("display", "none");  
+              updateStatus("Empty namecheap API Key.");
+            }              
 	  }else{
         // set default value for UI elements
 	    $("div#tabs ul li:eq(1)").css("display", "none");  // hide vultr tab
@@ -226,6 +254,7 @@ const loadSettings = () => {
         $("div#tabs ul li:eq(5)").css("display", "none");  // hide cloudflare tab
         $("div#tabs ul li:eq(6)").css("display", "none");  // hide namesilo tab
         $("div#tabs ul li:eq(7)").css("display", "none");  // hide namecom tab
+        $("div#tabs ul li:eq(8)").css("display", "none");  // hide namecheap tab
         $( "#tabs" ).tabs({ active: 0 });
 
         updateStatus("Cannot load settings.");
@@ -326,7 +355,20 @@ const saveSettings = () => {
         $("div#tabs ul li:eq(7)").css("display", "none");
         // save 'show Name.com tab' option to settings
         settings['show_namecom_box'] = 'no';
-    }      
+    } 
+
+    // show/hide 'namecheap' tab
+    if($('#show_namecheap_box').is(":checked")) {
+        // show namecheap tab
+        $("div#tabs ul li:eq(8)").css("display", "block");
+        // save 'show namecheap tab' option to settings
+        settings['show_namecheap_box'] = 'yes';
+    }else{
+        // hide namecheap tab
+        $("div#tabs ul li:eq(8)").css("display", "none");
+        // save 'show namecheap tab' option to settings
+        settings['show_namecheap_box'] = 'no';
+    }     
     
     if($('input#vultr_api_key').val() || $('input#do_api_key').val() || $('input#linode_api_key').val() || $('input#heroku_api_key').val() || $('input#cloudflare_api_key').val() || $('input#namesilo_api_key').val() || $('input#namecom_api_key').val()) {
         // If API key is valid
@@ -446,6 +488,21 @@ const saveSettings = () => {
             }else{
                 // hide Name.com tab
                 $("div#tabs ul li:eq(7)").css("display", "none");
+            }    
+        }   
+
+        // If namecheap API key is valid
+        if($('input#namecheap_api_key').val()) {
+            settings['namecheap_api_key'] = $('input#namecheap_api_key').val();
+            settings['namecheap_username'] = $('input#namecheap_username').val();
+                        
+            // only update namecheap tab if show 'namecheap' checkbox is ticked
+            if(($('#show_namecheap_box:checked').length > 0)) { 
+                $("div#tabs ul li:eq(8)").css("display", "block");
+                //update_namecheap_domains_info(settings['namecheap_username'],settings['namecheap_api_key'],'namecheap-domains', 'namecheap-dns','namecheap-emailforwards','namecheap-urlforwards');
+            }else{
+                // hide namecheap tab
+                $("div#tabs ul li:eq(8)").css("display", "none");
             }    
         }           
 	}else{
