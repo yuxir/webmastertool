@@ -34,6 +34,7 @@
         <li><img src="images/cloudflare.png" class="tabheadimg"/><a id="cloudflare" href="#tab-cloudflare">Cloudflare</a></li>
         <li><img src="images/namesilo.jpg" class="tabheadimg"/><a id="namesilo" href="#tab-namesilo">Namesilo</a></li>
         <li><a id="namecom" href="#tab-namecom">Name.com</a></li>
+        <li><img src="images/namecheap.png" class="tabheadimg"/><a id="namecheap" href="#tab-namecheap">Namecheap</a></li>
         <li><a id="settings" href="#tab-settings">Settings</a></li>
         <li><a id="about" href="#tab-about">About</a></li>
       </ul>
@@ -236,6 +237,26 @@
         </div>
       </div>       
       
+      <div id="tab-namecheap">
+        <div id="namecheap-div">
+         
+          <h3>Domains <i class="fa fa-globe"></i></h3>
+          <div id="namecheap-domains">
+          </div>
+          
+          <h3>DNS records <i class="fa fa-cube"></i></h3>
+          <div id="namecheap-dns">
+          </div>
+          
+          <h3>Email forwards <i class="fa fa-envelope"></i></h3>
+          <div id="namecheap-emailforwards">
+          </div>
+          
+          <h3>Url forwards <i class="fa fa-forward"></i></h3>
+          <div id="namecheap-urlforwards">
+          </div>
+        </div>
+      </div> 
       
       <div id="tab-settings">
         <div id="settings-div">
@@ -311,6 +332,16 @@
                 </div>
               </div>
             </div>
+            <div class="col-sm-3">
+              <img src="images/namecheap.png" class="tabheadimg"/>
+              
+              <div class="pretty p-default">
+                <input type="checkbox" id="show_namecheap_box"/>
+                <div class="state p-primary">
+                  <label for="show_namecheap_box">Namecheap</label>
+                </div>
+              </div>
+            </div>
           </div>
           <br/>
           
@@ -381,7 +412,18 @@
                 <input type="password" id="namecom_api_key" size="60"/><br/>
                 <input type="text" id="namecom_username" size="60"/><br/>
               </div>     
-          </div>  
+          </div> 
+
+          <div class="row divspace">
+              <div class="col-sm-4">
+                Namecheap API key (<a target="_blank" href="https://ap.www.namecheap.com/settings/tools">Get it</a>)<br/>
+                Namecheap username
+              </div> 
+              <div class="col-sm-8">
+                <input type="password" id="namecheap_api_key" size="60"/><br/>
+                <input type="text" id="namecheap_username" size="60"/><br/>
+              </div>     
+          </div>           
           
           <br/>
 		  <button type="button" id="save_settings">Save</button>
