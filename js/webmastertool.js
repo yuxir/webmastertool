@@ -484,7 +484,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }); 
         $("#namecom-div").accordion({
             heightStyle: "content"
-        });         
+        });  
+        $("#namecheap-div").accordion({
+            heightStyle: "content"
+        });          
         // Load settings to UI
         loadSettings();
     });
