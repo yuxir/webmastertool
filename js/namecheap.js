@@ -29,10 +29,24 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id) => {
                         html_block += '<div class="col-sm-4">Name</div><div class="col-sm-8">' + $(domains[d]).attr('Name') + '</div>';
                         html_block += '<div class="col-sm-4">Created</div><div class="col-sm-8">' + $(domains[d]).attr('Created') + '</div>';
                         html_block += '<div class="col-sm-4">Expires</div><div class="col-sm-8">' + $(domains[d]).attr('Expires') + '</div>';
-                        html_block += '<div class="col-sm-4">IsExpired</div><div class="col-sm-8">' + $(domains[d]).attr('IsExpired') + '</div>';
+                        html_block += '<div class="col-sm-4">IsExpired</div><div class="col-sm-8">';
+                        if($(domains[d]).attr('IsExpired')=='false') {
+                            html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                        }else{
+                            html_block += '<i class="fa fa-question" style="color:red;font-size:16px;"></i>';
+                        }
+                        html_block += $(domains[d]).attr('IsExpired') + '</div>';
+                        
                         html_block += '<div class="col-sm-4">IsLocked</div><div class="col-sm-8">' + $(domains[d]).attr('IsLocked') + '</div>';
                         html_block += '<div class="col-sm-4">AutoRenew</div><div class="col-sm-8">' + $(domains[d]).attr('AutoRenew') + '</div>';
-                        html_block += '<div class="col-sm-4">WhoisGuard</div><div class="col-sm-8">' + $(domains[d]).attr('WhoisGuard') + '</div>';
+                        html_block += '<div class="col-sm-4">WhoisGuard</div><div class="col-sm-8">';
+                        if($(domains[d]).attr('WhoisGuard')=='ENABLED') {
+                            html_block += '<i class="fa fa-check" style="color:green;font-size:16px;"></i>';
+                        }else{
+                            html_block += '<i class="fa fa-times" style="color:red;font-size:16px;"></i>';
+                        }
+                        html_block += '</div>';
+                        
                         html_block += '<div class="col-sm-4">IsPremium</div><div class="col-sm-8">' + $(domains[d]).attr('IsPremium') + '</div>';
                         html_block += '<div class="col-sm-4">Namechap DNS?</div><div class="col-sm-8">' + $(domains[d]).attr('IsOurDNS') + '</div>';
                         html_block += '</div>';  
