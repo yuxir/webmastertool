@@ -3,7 +3,7 @@
 const namecheap_api_url = 'https://api.namecheap.com/xml.response';
 
 // Load Namecheap domain information
-const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div_id) => {
+const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div_id, ef_div_id) => {
     if (api_key) {
         // As required by Namecheap API, client IP must be provided
         fetch('https://api.ipify.org/?format=json').then(function(response) {
@@ -67,6 +67,11 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div
             }).then(function(domainList) {
                 // update name servers
                 update_namecheap_ns(ip, username, api_key, domainList, ns_div_id);
+                return domainList;
+            }).then(function(domainList) {
+                // update email forwarding
+                update_namecheap_email_forwarding(ip, username, api_key, domainList, ef_div_id);
+                return domainList;
             }).catch(function(err) {
                 let html = '<span style="color:red;">Error while getting namecheap domain info.' + err + '</span>';
                 updateStatus(html);
@@ -99,8 +104,13 @@ const update_namecheap_ns = (ip, username, api_key, domains, ns_div_id) => {
         }).then(function(data) {
             let jsonObj = x2js.xml_str2json(data);
 
-            if(jsonObj && jsonObj['ApiResponse'] && jsonObj['ApiResponse']['CommandResponse']){
-                let name_servers = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver'];
+            if(jsonObj && 
+               jsonObj['ApiResponse'] &&
+               jsonObj['ApiResponse']['CommandResponse'] &&
+               jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult'] &&
+               jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver']){
+               
+               let name_servers = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver'];
                     
                 // Construct HTML for DNS DIV in 'Namesilo' tab
                 let html_block = '<div class="row divblock">';
@@ -116,6 +126,52 @@ const update_namecheap_ns = (ip, username, api_key, domains, ns_div_id) => {
                 // Update status bar
                 updateStatus('Loaded Namecheap DNS info.');
             }
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }
+}
+
+// Load namecheap Email forwarding
+const update_namecheap_email_forwarding = (ip, username, api_key, domains, div_id) => {
+    $("#" + div_id).html('');   
+    let x2js = new X2JS();
+    
+    for(let i in domains){
+        let domain = domains[i];
+        // Call Namecheap API to get Email  forwarding
+        let url = namecheap_api_url+'?ApiUser='+username+'&ApiKey='+api_key+'&UserName='+username+'&ClientIP='+ip+'&Command=namecheap.domains.dns.getEmailForwarding&DomainName='+domain;
+        
+        fetch(url).then(function(response) {
+            return response.text();
+        }).then(function(data) {
+            let jsonObj = x2js.xml_str2json(data);
+            if(jsonObj && 
+              jsonObj['ApiResponse'] && 
+              jsonObj['ApiResponse']['CommandResponse'] && 
+              jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult'] &&
+              jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult']['Forward']){
+                let result = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult'];
+                
+                // Construct HTML for DNS DIV in 'Namesilo' tab
+                let html_block = '<div class="row divblock">';
+                html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8"><b>' + domain + '</b></div>';
+                    
+                for(let r in result){
+                    if(result[r]['_mailbox'] && result[r]['__text']) {
+                        html_block += '<div class="col-sm-4">Mailbox</div><div class="col-sm-8"><b>' + result[r]['_mailbox'] + '</b></div>';
+                        html_block += '<div class="col-sm-4">Forward to</div><div class="col-sm-8"><b>' + result[r]['__text'] + '</b></div>';
+                    }
+                }
+                html_block += '</div>';
+                
+                // Update email forwards UI
+                $("#" + div_id).html($("#" + div_id).html()+html_block);
+                // Update status bar
+                updateStatus('Loaded Namecheap Email forward info.');
+            }
+            
         }).catch(function(err) {
             let html = '<span style="color:red;">Error: ' + err + '</span>';
             updateStatus(html);
