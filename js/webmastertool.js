@@ -238,7 +238,7 @@ const loadSettings = () => {
               
               // only show namecheap tab if the namecheap checkbox is ticked in settings
               if(settings.webmastertool['show_namecheap_box']=='yes'){
-                 update_namecheap_domains_info(settings.webmastertool['namecheap_username'],settings.webmastertool['namecheap_api_key'],'namecheap-domains'); //update_namecheap_domains_info(settings.webmastertool['namecheap_username'],settings.webmastertool['namecheap_api_key'],'namecheap-domains', 'namecheap-dns','namecheap-emailforwards','namecheap-urlforwards');
+                 update_namecheap_domains_info(settings.webmastertool['namecheap_username'],settings.webmastertool['namecheap_api_key'],'namecheap-domains','namecheap-ns'); //update_namecheap_domains_info(settings.webmastertool['namecheap_username'],settings.webmastertool['namecheap_api_key'],'namecheap-domains', 'namecheap-dns','namecheap-emailforwards','namecheap-urlforwards');
               }
             }else{
               // hide namecheap tab if namecheap API key is not present
