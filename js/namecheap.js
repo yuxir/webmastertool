@@ -2,6 +2,59 @@
 
 const namecheap_api_url = 'https://api.namecheap.com/xml.response';
 
+// Load Namecheap account information
+const update_namecheap_account_info = (username, api_key, div_id) => {
+    if (api_key) {
+        // As required by Namecheap API, client IP must be provided
+        fetch('https://api.ipify.org/?format=json').then(function(response) {
+            return response.json();
+        }).then(function(json) {  
+            let ip = json['ip'];
+            // Call Namecheap API to get domains info
+            let url = namecheap_api_url+'?ApiUser='+username+'&ApiKey='+api_key+'&UserName='+username+'&ClientIP='+ip+'&Command=namecheap.users.getBalances';
+            fetch(url).then(function(response) {
+                return response.text();
+            }).then(function(data) {
+                let x2js = new X2JS();
+                let jsonObj = x2js.xml_str2json(data);
+                
+                if(jsonObj && 
+                   jsonObj['ApiResponse'] && 
+                   jsonObj['ApiResponse']['CommandResponse'] && 
+                   jsonObj['ApiResponse']['CommandResponse']['UserGetBalancesResult']){
+                    let result = jsonObj['ApiResponse']['CommandResponse']['UserGetBalancesResult'];
+                    // Construct HTML for DNS DIV in 'Namecheap' tab
+                    let html_block = '<div class="row divblock">';
+                    html_block += '<div class="col-sm-4">Currency</div><div class="col-sm-8"><b>' + result['_Currency'] + '</b></div>';
+                    html_block += '<div class="col-sm-4">Account balance</div><div class="col-sm-8"><b>' + result['_AccountBalance'] + '</b></div>';
+                    html_block += '<div class="col-sm-4">Available balance</div><div class="col-sm-8"><b>' + result['_AvailableBalance'] + '</b></div>';
+                    html_block += '<div class="col-sm-4">Earned amount</div><div class="col-sm-8"><b>' + result['_EarnedAmount'] + '</b></div>';
+                    html_block += '<div class="col-sm-4">Funds required for autorenew</div><div class="col-sm-8"><b>' + result['_FundsRequiredForAutoRenew'] + '</b></div>';
+                    html_block += '<div class="col-sm-4">Withdrawable amount</div><div class="col-sm-8"><b>' + result['_WithdrawableAmount'] + '</b></div>';
+                
+                    html_block += '</div>';
+
+                    // Update account info UI
+                    $("#" + div_id).html(html_block);
+                
+                    // Update status bar
+                    updateStatus('Loaded account info.');
+                }
+            }).catch(function(err) {
+                let html = '<span style="color:red;">Error while getting namecheap account info.' + err + '</span>';
+                updateStatus(html);
+            });
+            
+        }).catch(function(err) {
+            let html = '<span style="color:red;">Error: ' + err + '</span>';
+            updateStatus(html);
+        });        
+    }else{
+        let html = '<span style="color:red;">Invalid API key.</span>';
+        updateStatus(html);
+    }
+}
+
 // Load Namecheap domain information
 const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div_id, ef_div_id, dns_div_id) => {
     if (api_key) {
@@ -62,19 +115,19 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div
                 
                 // Update status bar
                 updateStatus('Loaded domain info.');
-
+                
                 return domainlist;
-            })./*then(function(domainList) {
+            }).then(function(domainList) {
                 // update name servers
-                update_namecheap_ns(ip, username, api_key, domainList, ns_div_id);
+                //update_namecheap_ns(ip, username, api_key, domainList, ns_div_id);
                 return domainList;
             }).then(function(domainList) {
                 // update email forwarding
-                update_namecheap_email_forwarding(ip, username, api_key, domainList, ef_div_id);
+                //update_namecheap_email_forwarding(ip, username, api_key, domainList, ef_div_id);
                 return domainList;
-            }).*/then(function(domainList) {
+            }).then(function(domainList) {
                 // update DNS records
-                update_namecheap_dns(ip, username, api_key, domainList, dns_div_id);
+                //update_namecheap_dns(ip, username, api_key, domainList, dns_div_id);
                 return domainList;
             }).catch(function(err) {
                 let html = '<span style="color:red;">Error while getting namecheap domain info.' + err + '</span>';
