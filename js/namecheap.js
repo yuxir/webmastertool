@@ -56,13 +56,14 @@ const update_namecheap_account_info = (username, api_key, div_id) => {
 }
 
 // Load Namecheap domain information
-const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div_id, ef_div_id, dns_div_id) => {
+const update_namecheap_domains_info = (username, api_key, domains_div_id) => {
     if (api_key) {
         // As required by Namecheap API, client IP must be provided
         fetch('https://api.ipify.org/?format=json').then(function(response) {
             return response.json();
         }).then(function(json) {  
             let ip = json['ip'];
+            $('#namecheap-client-ip').val(ip);
             // Call Namecheap API to get domains info
             let url = namecheap_api_url+'?ApiUser='+username+'&ApiKey='+api_key+'&UserName='+username+'&ClientIP='+ip+'&Command=namecheap.domains.getList';
             fetch(url).then(function(response) {
@@ -71,12 +72,12 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div
                 let x2js = new X2JS();
                 let jsonObj = x2js.xml_str2json(data);
                 let domains = jsonObj['ApiResponse']['CommandResponse']['DomainGetListResult']['Domain'];
-                let domainlist = [];
+                let domainlist = '';
                 // Construct HTML for domains DIV in 'namecheap' tab
                 let html_block = '';
                 for(let d in domains) {
                     if(domains[d]['_Name']) {
-                        domainlist.push(domains[d]['_Name']);
+                        domainlist = domainlist + ',' + domains[d]['_Name'];
                         html_block += '<div class="row divblock">';
                         html_block += '<div class="row">';
                         html_block += '<div class="col-sm-4">ID</div><div class="col-sm-8">' + domains[d]['_ID'] + '</div>';
@@ -116,19 +117,7 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id, ns_div
                 // Update status bar
                 updateStatus('Loaded domain info.');
                 
-                return domainlist;
-            }).then(function(domainList) {
-                // update name servers
-                //update_namecheap_ns(ip, username, api_key, domainList, ns_div_id);
-                return domainList;
-            }).then(function(domainList) {
-                // update email forwarding
-                //update_namecheap_email_forwarding(ip, username, api_key, domainList, ef_div_id);
-                return domainList;
-            }).then(function(domainList) {
-                // update DNS records
-                //update_namecheap_dns(ip, username, api_key, domainList, dns_div_id);
-                return domainList;
+                $('input#namecheap-domains-hidden').val(domainlist);
             }).catch(function(err) {
                 let html = '<span style="color:red;">Error while getting namecheap domain info.' + err + '</span>';
                 updateStatus(html);
