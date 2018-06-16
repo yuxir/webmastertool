@@ -16,6 +16,7 @@ const update_namecheap_account_info = (username, api_key, div_id) => {
                 return response.text();
             }).then(function(data) {
                 let x2js = new X2JS();
+                // convert returned XML to json
                 let jsonObj = x2js.xml_str2json(data);
                 
                 if(jsonObj && 
@@ -23,7 +24,7 @@ const update_namecheap_account_info = (username, api_key, div_id) => {
                    jsonObj['ApiResponse']['CommandResponse'] && 
                    jsonObj['ApiResponse']['CommandResponse']['UserGetBalancesResult']){
                     let result = jsonObj['ApiResponse']['CommandResponse']['UserGetBalancesResult'];
-                    // Construct HTML for DNS DIV in 'Namecheap' tab
+                    // Construct HTML for account DIV in 'Namecheap' tab
                     let html_block = '<div class="row divblock">';
                     html_block += '<div class="col-sm-4">Currency</div><div class="col-sm-8"><b>' + result['_Currency'] + '</b></div>';
                     html_block += '<div class="col-sm-4">Account balance</div><div class="col-sm-8"><b>' + result['_AccountBalance'] + '</b></div>';
@@ -72,7 +73,7 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id) => {
                 let x2js = new X2JS();
                 let jsonObj = x2js.xml_str2json(data);
                 let domains = jsonObj['ApiResponse']['CommandResponse']['DomainGetListResult']['Domain'];
-                let domainlist = '';
+                let domainlist = '';  // domainlist will be kept in a hidden field, and to be used in other Namecheap API calls
                 // Construct HTML for domains DIV in 'namecheap' tab
                 let html_block = '';
                 for(let d in domains) {
@@ -117,6 +118,7 @@ const update_namecheap_domains_info = (username, api_key, domains_div_id) => {
                 // Update status bar
                 updateStatus('Loaded domain info.');
                 
+                // Save domain list to a hidden field
                 $('input#namecheap-domains-hidden').val(domainlist);
             }).catch(function(err) {
                 let html = '<span style="color:red;">Error while getting namecheap domain info.' + err + '</span>';
@@ -151,12 +153,12 @@ const update_namecheap_ns = (ip, username, api_key, domains, ns_div_id) => {
             let jsonObj = x2js.xml_str2json(data);
 
             if(jsonObj && 
-               jsonObj['ApiResponse'] &&
-               jsonObj['ApiResponse']['CommandResponse'] &&
-               jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult'] &&
-               jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver']){
+                jsonObj['ApiResponse'] &&
+                jsonObj['ApiResponse']['CommandResponse'] &&
+                jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult'] &&
+                jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver']){
                
-               let name_servers = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver'];
+                let name_servers = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetListResult']['Nameserver'];
                     
                 // Construct HTML for DNS DIV in 'Namesilo' tab
                 let html_block = '<div class="row divblock">';
@@ -198,24 +200,24 @@ const update_namecheap_email_forwarding = (ip, username, api_key, domains, div_i
               jsonObj['ApiResponse']['CommandResponse'] && 
               jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult'] &&
               jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult']['Forward']){
-                let result = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult'];
+               let result = jsonObj['ApiResponse']['CommandResponse']['DomainDNSGetEmailForwardingResult'];
                 
-                // Construct HTML for DNS DIV in 'Namesilo' tab
-                let html_block = '<div class="row divblock">';
-                html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8"><b>' + domain + '</b></div>';
+               // Construct HTML for DNS DIV in 'Namesilo' tab
+               let html_block = '<div class="row divblock">';
+               html_block += '<div class="col-sm-4">Domain</div><div class="col-sm-8"><b>' + domain + '</b></div>';
                     
-                for(let r in result){
-                    if(result[r]['_mailbox'] && result[r]['__text']) {
-                        html_block += '<div class="col-sm-4">Mailbox</div><div class="col-sm-8"><b>' + result[r]['_mailbox'] + '</b></div>';
-                        html_block += '<div class="col-sm-4">Forward to</div><div class="col-sm-8"><b>' + result[r]['__text'] + '</b></div>';
-                    }
-                }
-                html_block += '</div>';
+               for(let r in result){
+                   if(result[r]['_mailbox'] && result[r]['__text']) {
+                       html_block += '<div class="col-sm-4">Mailbox</div><div class="col-sm-8"><b>' + result[r]['_mailbox'] + '</b></div>';
+                       html_block += '<div class="col-sm-4">Forward to</div><div class="col-sm-8"><b>' + result[r]['__text'] + '</b></div>';
+                   }
+               }
+               html_block += '</div>';
                 
-                // Update email forwards UI
-                $("#" + div_id).html($("#" + div_id).html()+html_block);
-                // Update status bar
-                updateStatus('Loaded Namecheap Email forward info.');
+               // Update email forwards UI
+               $("#" + div_id).html($("#" + div_id).html()+html_block);
+               // Update status bar
+               updateStatus('Loaded Namecheap Email forward info.');
             }
             
         }).catch(function(err) {
