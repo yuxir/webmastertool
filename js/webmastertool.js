@@ -561,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         $('#namecheap-domains-hidden').val().split(','), 
                                         'namecheap-dns');
                 }else if(id=='namecheap-email-forward-title') {
-                    update_namecheap_dns($('#namecheap-client-ip').val(), 
+                    update_namecheap_email_forwarding($('#namecheap-client-ip').val(), 
                                         $('input#namecheap_username').val(), 
                                         $('input#namecheap_api_key').val(), 
                                         $('#namecheap-domains-hidden').val().split(','), 
