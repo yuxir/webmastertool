@@ -172,8 +172,8 @@ const update_linode_instances_info = (api_key, div_id, dashboard_div_id) => {
                     }
                     
                     // HTML in Linode dashboard 
-                    dashboard_server_html_block += '<div class="col-sm-4">Linode server: ' + result["data"][s]['label'] + '</div>';
-                    dashboard_server_html_block += '<div class="col-sm-8">';
+                    dashboard_server_html_block += '<div class="col-sm-6">Linode server: ' + result["data"][s]['label'] + '</div>';
+                    dashboard_server_html_block += '<div class="col-sm-6">';
 					if (result["data"][s]['status'].trim()=='running') {
                         dashboard_server_html_block += '<i class="fa fa-power-off" style="color:red;font-size:16px;"></i>';
                     }else{
